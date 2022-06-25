@@ -2,6 +2,10 @@
 <!--
 XML Schema Definition for DecentSampler preset files.
 
+Based on David Hilowitz's Decent Sampler documentation:
+https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html
+
+
 MIT License
 
 Copyright (c) 2022 Praash
@@ -26,6 +30,11 @@ SOFTWARE.
 
 -->
 
+<!--
+================================================================
+    Main structure
+================================================================
+-->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="DecentSampler">
         <xs:complexType>
@@ -33,17 +42,17 @@ SOFTWARE.
                 <xs:element name="ui" type="ui" />
                 <xs:element name="groups" type="groups" minOccurs="1"></xs:element>
 
-                <xs:element name="effects" type="effects"/>
+                <xs:element name="effects" type="effects" />
                 <xs:element name="midi" type="midi" />
             </xs:choice>
 
             <xs:attribute name="minVersion" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
-                        (optional): This is the minimum version on which this preset is known to run.
-                        If a user is running an old version of DS, and a developer has specified a minVersion for their instrument, a dialog box will show up telling users that their version is outdated and that they should upgrade in order to get the full effect.
-                        They can than choose to ignore this warning or hit download.
-                        The dialog box does not show up for iOS users as most of them have auto-updates turned on.
+(optional): This is the minimum version on which this preset is known to run.
+If a user is running an old version of DS, and a developer has specified a minVersion for their instrument, a dialog box will show up telling users that their version is outdated and that they should upgrade in order to get the full effect.
+They can than choose to ignore this warning or hit download.
+The dialog box does not show up for iOS users as most of them have auto-updates turned on.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
@@ -51,20 +60,22 @@ SOFTWARE.
             <xs:attribute name="pluginVersion" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
-                        (undocumented) a possible alternative to `minVersion`, found in some DecentSamples presets.
+(undocumented): a possible alternative to `minVersion`, found in some DecentSamples presets.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
         </xs:complexType>
     </xs:element>
-
-
-    <!-- Type definitions -->
+<!--
+================================================================
+    Type definitions
+================================================================
+-->
     <xs:complexType name="ui">
         <xs:annotation>
             <xs:documentation>
-                The `ui` element is how you specify a user interface for your instrument.
-                Each dspreset should have at most one `ui` element.
+The `ui` element is how you specify a user interface for your instrument.
+Each dspreset should have at most one `ui` element.
             </xs:documentation>
         </xs:annotation>
 
@@ -75,7 +86,8 @@ SOFTWARE.
         <xs:attribute name="bgColor" type="hexARGB">
             <xs:annotation>
                 <xs:documentation>
-                    An eight digit hex value indicating the background color to be used for the background of the UI. This color will be drawn underneath any background image specified by `bgImage`.
+An eight digit hex value indicating the background color to be used for the background of the UI.
+This color will be drawn underneath any background image specified by `bgImage`.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -83,7 +95,7 @@ SOFTWARE.
         <xs:attribute name="bgImage" type="xs:string">
             <xs:annotation>
                 <xs:documentation>
-                    A relative or absolutely path to a background image to use. 
+A relative or absolute path to a background image to use.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -91,7 +103,8 @@ SOFTWARE.
         <xs:attribute name="coverArt" type="xs:string">
             <xs:annotation>
                 <xs:documentation>
-                    A relative or absolutely path to a cover art image to use. After the first time this library is opened, this will get displayed on the “My Libraries” tab.
+A relative or absolute path to a cover art image to use.
+After the first time this library is opened, this will get displayed on the “My Libraries” tab.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -99,7 +112,8 @@ SOFTWARE.
         <xs:attribute name="width" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The width of your user interface. Recommended value: 812.
+The width of your user interface.
+Recommended value: `812`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -107,7 +121,8 @@ SOFTWARE.
         <xs:attribute name="height" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The height of your user interface. Recommended value: 375.
+The height of your user interface.
+Recommended value: `375`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -120,23 +135,24 @@ SOFTWARE.
     <xs:complexType name="tab">
         <xs:annotation>
             <xs:documentation>
-                We may, at some point, add support for multiple tabs.
-                At present it is only possible to have a single tab within DecentSampler instruments.
-                As such, every UI must have at most one `tab` element. 
+We may, at some point, add support for multiple tabs.
+At present it is only possible to have a single tab within DecentSampler instruments.
+As such, every UI must have at most one `tab` element.
             </xs:documentation>
         </xs:annotation>
 
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
 
         <xs:attribute name="name">
             <xs:annotation>
                 <xs:documentation>
-                    An optional name to be associated with this tab. This is currently not displayed anywhere.
+An optional name to be associated with this tab.
+This is currently not displayed anywhere.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -146,8 +162,8 @@ SOFTWARE.
     <xs:complexType name="labeled-knob">
         <xs:annotation>
             <xs:documentation>
-                A user control widget containing a built-in label.
-                For precise UI creation, it may be advisable to use a combination of `control` and `label` elements rather than `labeled-knob`.
+A user control widget containing a built-in label.
+For precise UI creation, it may be advisable to use a combination of `control` and `label` elements rather than `labeled-knob`.
             </xs:documentation>
         </xs:annotation>
 
@@ -158,7 +174,7 @@ SOFTWARE.
         <xs:attribute name="label" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    If `showLabel` is true, the actual text that should be displayed above the control
+If `showLabel` is `true`, the actual text that should be displayed above the control
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -166,7 +182,8 @@ SOFTWARE.
         <xs:attribute name="showLabel" type="xs:boolean" default="true">
             <xs:annotation>
                 <xs:documentation>
-                    A true/false value dictating whether or not a built-in label should be displayed. Default: true for `labeled-knob` and false for `control` elements. (???)
+A true/false value dictating whether or not a built-in label should be displayed.
+Default: `true` for `labeled-knob` and `false` for `control` elements.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -174,7 +191,10 @@ SOFTWARE.
         <xs:attribute name="parameterName" type="xs:string">
             <xs:annotation>
                 <xs:documentation>
-                    In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used. In such situations, this control will be labeled using the `parameterName`. It is good practice to always include a `parameterName`. If no `parameterName` is specified and `label` is specified, then that will be used instead. 
+In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used.
+In such situations, this control will be labeled using the `parameterName`.
+It is good practice to always include a `parameterName`.
+If no `parameterName` is specified and `label` is specified, then that will be used instead.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -187,7 +207,7 @@ SOFTWARE.
     <xs:complexType name="control">
         <xs:annotation>
             <xs:documentation>
-                A user control widget without a built-in label.
+A user control widget without a built-in label.
             </xs:documentation>
         </xs:annotation>
 
@@ -200,8 +220,8 @@ SOFTWARE.
     <xs:complexType name="menu">
         <xs:annotation>
             <xs:documentation>
-                A drop-down menu within your UI.
-                In order for your drop-down menu to have options, it must contain `option` elements.
+A drop-down menu within your UI.
+In order for your drop-down menu to have options, it must contain `option` elements.
             </xs:documentation>
         </xs:annotation>
 
@@ -212,7 +232,9 @@ SOFTWARE.
         <xs:attribute name="value" type="xs:integer">
             <xs:annotation>
                 <xs:documentation>
-                    The is the 1-based index of the menu option that is currently selected. NOTE: Index numbers for menu items start at 1. A value of 0 means that no item is selected.
+The is the 1-based index of the menu option that is currently selected.
+NOTE: Index numbers for menu items start at `1`.
+A value of `0` means that no item is selected.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -224,7 +246,9 @@ SOFTWARE.
     <xs:complexType name="option">
         <xs:annotation>
             <xs:documentation>
-                *That's right*. The `option` element has only one attribute. In order to have your `option` elements actually do something useful, you need to attach bindings to them. 
+*That's right*.
+The `option` element has only one attribute.
+In order to have your `option` elements actually do something useful, you need to attach bindings to them.
             </xs:documentation>
         </xs:annotation>
 
@@ -234,7 +258,9 @@ SOFTWARE.
 
         <xs:attribute name="name">
             <xs:annotation>
-                <xs:documentation>The name of this option.</xs:documentation>
+                <xs:documentation>
+The name of this option.
+                </xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
@@ -243,7 +269,7 @@ SOFTWARE.
         <xs:attribute name="type" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    TODO
+TODO
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -259,13 +285,15 @@ SOFTWARE.
 
     <xs:complexType name="label">
         <xs:annotation>
-            <xs:documentation>Specifies a text label.</xs:documentation>
+            <xs:documentation>
+Specifies a text label.
+            </xs:documentation>
         </xs:annotation>
 
         <xs:attribute name="text" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The actual text that should be displayed as part of the label.
+The actual text that should be displayed as part of the label.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -278,14 +306,20 @@ SOFTWARE.
     <xs:complexType name="groups">
         <xs:annotation>
             <xs:documentation>
-                Every dspreset file should have one and only one `groups` element. This is where you specify the samples that make up your sample library. This element lives right underneath the top-level `DecentSampler` element.
+Every dspreset file should have one and only one `groups` element.
+This is where you specify the samples that make up your sample library.
+This element lives right underneath the top-level `DecentSampler` element.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence maxOccurs="unbounded">
             <xs:element name="group">
                 <xs:annotation>
                     <xs:documentation>
-                        Samples live in groups. There can be many group elements under the `groups` element. It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob. The order of groups in a file matters insofar as bindings will often reference groups by using an index. The first group in a file is group 0, the second is group 1, etc.
+Samples live in groups.
+There can be many group elements under the `groups` element.
+It can be useful to sort your samples into groups in order to apply similar settings to them or to control them with a knob.
+The order of groups in a file matters insofar as bindings will often reference groups by using an index.
+The first group in a file is group `0`, the second is group `1`, etc.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
@@ -344,7 +378,7 @@ SOFTWARE.
         <xs:attribute name="path" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The relative path of the sample file to play for this zone.
+The relative path of the sample file to play for this zone.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -352,7 +386,8 @@ SOFTWARE.
         <xs:attribute name="loNote" type="midiNote" default="0">
             <xs:annotation>
                 <xs:documentation>
-                    The MIDI note number of the lowest note for which the zone should be triggered. Default: 0.
+The MIDI note number of the lowest note for which the zone should be triggered.
+Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -360,7 +395,8 @@ SOFTWARE.
         <xs:attribute name="hiNote" type="midiNote" default="127">
             <xs:annotation>
                 <xs:documentation>
-                    The MIDI note number of the highest note for which the zone should be triggered. Default: 127.
+The MIDI note number of the highest note for which the zone should be triggered.
+Default: `127`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -368,7 +404,7 @@ SOFTWARE.
         <xs:attribute name="rootNote" type="midiNote" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The MIDI note number of the root note of the sample.
+The MIDI note number of the root note of the sample.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -380,7 +416,7 @@ SOFTWARE.
     <xs:simpleType name="midiNote">
         <xs:annotation>
             <xs:documentation>
-                A MIDI note number (from 0 to 127)
+A MIDI note number (from 0 to 127)
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:integer">
@@ -393,8 +429,8 @@ SOFTWARE.
     <xs:simpleType name="curveShape">
         <xs:annotation>
             <xs:documentation>
-                A value from -100 to 100 that determines the shape of a curve.
-                `-100` is a logarithmic curve, `0` is a linear curve, and `100` is an exponential curve.
+A value from -100 to 100 that determines the shape of a curve.
+`-100` is a logarithmic curve, `0` is a linear curve, and `100` is an exponential curve.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:decimal">
@@ -407,9 +443,9 @@ SOFTWARE.
     <xs:simpleType name="hexARGB">
         <xs:annotation>
             <xs:documentation>
-                Colors are represented throughout the dspreset files using an 8-digit ARGB color format.
-                These are identical to web color hex codes except with an additional 2-digit hex number in front of them.
-                The first two digits are a hexadecimal representation of alpha level with 00 being fully transparent, 80 being 50% transparent, and FF being fully opaque.
+Colors are represented throughout the dspreset files using an 8-digit ARGB color format.
+These are identical to web color hex codes except with an additional 2-digit hex number in front of them.
+The first two digits are a hexadecimal representation of alpha level with 00 being fully transparent, 80 being 50% transparent, and FF being fully opaque.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:hexBinary">
@@ -469,9 +505,13 @@ SOFTWARE.
         </xs:restriction>
     </xs:simpleType>
 
-    <!-- Attribute definitions -->
+<!--
+================================================================
+    Attribute group definitions
+================================================================
+-->
 
-    <!-- Common parameters for <sample>, <group> and <groups> -->
+<!-- Common attributes for <sample>, <group> and <groups> -->
     <xs:attributeGroup name="regionSettings">
         <xs:attribute name="volume" type="decibelGain" />
         <xs:attributeGroup ref="adsrEnvelope" />
@@ -481,15 +521,15 @@ SOFTWARE.
         <xs:attribute name="attack" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
-                    The attack time in seconds of the amplitude envelope of this zone.
-                </xs:documentation>
+The attack time in seconds of the amplitude envelope of this zone.
+            </xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
         <xs:attribute name="decay" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
-                    The decay time in seconds of the amplitude envelope of this zone.
+The decay time in seconds of the amplitude envelope of this zone.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -497,7 +537,7 @@ SOFTWARE.
         <xs:attribute name="sustain" type="floatRelative">
             <xs:annotation>
                 <xs:documentation>
-                    The sustain level (`0.0` - `1.0`) of the amplitude envelope of this zone.
+The sustain level (`0.0` - `1.0`) of the amplitude envelope of this zone.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -505,7 +545,7 @@ SOFTWARE.
         <xs:attribute name="release" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
-                    The release time in seconds of the amplitude envelope of this zone.
+The release time in seconds of the amplitude envelope of this zone.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -515,12 +555,12 @@ SOFTWARE.
         <xs:attribute name="releaseCurve" type="curveShape" default="100" />
     </xs:attributeGroup>
 
-
+<!-- Common attributes for UI widgets -->
     <xs:attributeGroup name="widgetGeometry">
         <xs:attribute name="x" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The x position, in pixels, where (0,0) is the top-left corner.
+The x position, in pixels, where (0,0) is the top-left corner.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -528,7 +568,7 @@ SOFTWARE.
         <xs:attribute name="y" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The y position, in pixels, where (0,0) is the top-left corner.
+The y position, in pixels, where (0,0) is the top-left corner.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -536,7 +576,7 @@ SOFTWARE.
         <xs:attribute name="width" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The width of the whole widget, in pixels
+The width of the whole widget, in pixels
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -544,30 +584,33 @@ SOFTWARE.
         <xs:attribute name="height" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
-                    The height of the whole widget, in pixels
+The height of the whole widget, in pixels
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 
 
+<!-- Common attributes for UI text -->
     <xs:attributeGroup name="textProperties">
         <xs:attribute name="textColor" type="hexARGB" />
         <xs:attribute name="textSize" type="xs:integer" default="12">
             <xs:annotation>
                 <xs:documentation>
-                    A font size for the text label. Default: 12
+A font size for the text label.
+Default: `12`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 
-
+<!-- Common attributes for UI controls -->
     <xs:attributeGroup name="controlProperties">
         <xs:attribute name="minValue" type="xs:decimal" default="0">
             <xs:annotation>
                 <xs:documentation>
-                    The minimum value of your control. Default: 0
+The minimum value of your control.
+Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -575,7 +618,8 @@ SOFTWARE.
         <xs:attribute name="maxValue" type="xs:decimal" default="1">
             <xs:annotation>
                 <xs:documentation>
-                    The maximum value of your control. Default: 1
+The maximum value of your control.
+Default: `1`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -583,7 +627,8 @@ SOFTWARE.
         <xs:attribute name="value" type="xs:decimal" default="0">
             <xs:annotation>
                 <xs:documentation>
-                    The initial value of your control. Default: 0
+The initial value of your control.
+Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -598,7 +643,8 @@ SOFTWARE.
         <xs:attribute name="uid">
             <xs:annotation>
                 <xs:documentation>
-                    This is an internally generated value. This can be ignored.
+This is an internally generated value.
+This can be ignored.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
