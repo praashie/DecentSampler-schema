@@ -1,15 +1,20 @@
 # DecentSampler Unofficial XML schema
 ## Let's make `.dspreset` editing... **Decent**!
 
-Making virtual instruments for DecentSampler eventually means some tedious editing of the XML-based `.dspreset` files by hand.
-If your text editor supports XML schemas, you can **super-charge your editing experience**!
+This is an unofficial XML schema for  preset (`.dspreset`) files.
+
+Making virtual instruments for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) eventually means some tedious editing of the XML-based `.dspreset` files by hand...
+
+However, if you use a text editor that supports XML schemas, you can **super-charge your editing experience**:
 
 ### Use context-aware code completion and suggestions
-![Code completion screencast](images/demo_completion.webm)
+![Code completion screencast](images/demo_completion.gif)
 
 ### See documentation by hovering over a keyword
+![Code completion screencast](images/demo_hover_doc.gif)
 
 ### Spot errors with tags, attributes, structure, and incorrectly formatted values
+![Code completion screencast](images/demo_errors.gif)
 
 ## Setup in VS Code
 
@@ -32,15 +37,18 @@ Paste the following contents in a new text file:
     </groups>
 </DecentSampler>
 ```
-Place your cursor inside the `<group>` tag, and hit <kbd>Ctrl</kbd>+<kbd>Space</kbd>.
-You should see a suggestion
+Place your cursor inside the `<group>` tag, and hit <kbd>Ctrl</kbd>+<kbd>Space</kbd> to trigger suggestions!
 
+### Edit an existing `.dspreset` with the schema
 
-### 
+You can copy the `<?xml-model ...?>` line inside another `.dspreset` file to activate the schema.
+This will also work with some online XML validation tools.
 
 ### Associate the schema with all `*.dspreset` files
 
-Open your `settings.json` (instructions here)
+#### :warning: If you have trouble with this, use the previous section's `xml-model` line as a workaround.
+
+Open your `settings.json` [(instructions here)](https://stackoverflow.com/a/65909052), and copy the following settings inside it:
 
 ```json
 {
@@ -53,9 +61,7 @@ Open your `settings.json` (instructions here)
 }
 ```
 
-## A ...*schema*? For ...DecentSampler? Huh?
-
-This is an unofficial XML schema for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) preset (`.dspreset`) files.
+## A ...*schema*? Huh?
 
 An XML Schema Definition (XSD) is a standard way to describe the expected structure of an XML document.
 
