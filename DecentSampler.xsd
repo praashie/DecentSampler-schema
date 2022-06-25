@@ -92,18 +92,18 @@ This color will be drawn underneath any background image specified by `bgImage`.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="bgImage" type="xs:string">
+        <xs:attribute name="bgImage" type="relativeFilePath">
             <xs:annotation>
                 <xs:documentation>
-A relative or absolute path to a background image to use.
+A relative path to a background image to use.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="coverArt" type="xs:string">
+        <xs:attribute name="coverArt" type="relativeFilePath">
             <xs:annotation>
                 <xs:documentation>
-A relative or absolute path to a cover art image to use.
+A relative path to a cover art image to use.
 After the first time this library is opened, this will get displayed on the “My Libraries” tab.
                 </xs:documentation>
             </xs:annotation>
@@ -375,7 +375,7 @@ The first group in a file is group `0`, the second is group `1`, etc.
 
 
     <xs:complexType name="sample">
-        <xs:attribute name="path" type="xs:string" use="required">
+        <xs:attribute name="path" type="relativeFilePath" use="required">
             <xs:annotation>
                 <xs:documentation>
 The relative path of the sample file to play for this zone.
@@ -461,6 +461,17 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="relativeFilePath">
+        <xs:annotation>
+            <xs:documentation>
+Relative path to a file.
+Do not use absolute paths - they break across OS platforms and users.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_][a-zA-Z0-9 #\-_./\\]*"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="decibelGain">
         <xs:restriction base="xs:string">
