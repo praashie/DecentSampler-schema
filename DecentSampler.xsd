@@ -424,20 +424,137 @@ A whole number that specifies the number of voices allowed for this tag.
 
 
     <xs:complexType name="effects">
+        <xs:annotation>
+            <xs:documentation>
+Within the `effects` element, you can have any number of `effect` sub-elements.
+            </xs:documentation>
+        </xs:annotation>
+
         <xs:sequence>
-            <xs:element name="effect" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="type" use="required" />
-                    <xs:attribute name="frequency" type="xs:decimal" />
-                    <xs:attribute name="mix" type="xs:decimal" />
-                    <xs:attribute name="modDepth" type="xs:decimal" />
-                    <xs:attribute name="modRate" type="xs:decimal" />
-                    <xs:attribute name="wetLevel" type="xs:decimal" />
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="effect" type="effect" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="effect">
+        <xs:annotation>
+            <xs:documentation>
+
+Specify parameters for each individual effect that you would like to have in your global effects chain.
+There are currently only a handful effects available although more could definitely be added on request.
+
+&lt;h2&gt; Effect types: &lt;/h2&gt;
+
+&lt;h3&gt; `chorus` &lt;/h3&gt;
+Attributes: `mix`, `modDepth`, `modRate`
+
+&lt;h3&gt; `delay` &lt;/h3&gt;
+Attributes: `delayTime`, `feedback`, `stereoOffset`, `wetLevel`
+
+&lt;h3&gt; Filters: `lowpass`, `lowpass_4pl`, `bandpass`, `hipass` &lt;/h3&gt;
+Attributes: `frequency`, `resonance`
+
+&lt;h3&gt; `phaser` &lt;/h3&gt;
+Attributes: `centerFrequency`, `feedback`, `mix`, `modDepth`, `modRate`
+
+&lt;h3&gt; `reverb` &lt;/h3&gt;
+Attributes: `damping`, `roomSize`, `wetLevel`
+
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:attribute name="type" type="effectType" use="required" />
+
+        <xs:attribute name="centerFrequency" type="xs:decimal" default="400">
+            <xs:annotation><xs:documentation>
+The center frequency (in Hz) of the phaser all-pass filters modulation.
+Default: `400`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="damping" type="floatRelative" default="0.3"/>
+        <xs:attribute name="delayTime" default="0.7">
+            <xs:annotation><xs:documentation>
+The delay time in seconds.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="10" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="feedback" type="floatRelative" default="0.2" />
+        <xs:attribute name="frequency" type="floatRelative" default="0.3">
+            <xs:annotation><xs:documentation>
+The filter frequency as a number between `0.0` - `1.0`.
+Default: `0.3`
+
+Very poorly documented!
+
+"0.0 is not damped, 1.0 is fully damped"
+
+"Fully damped" in the case of LP? Is the range 20 Hz - 20 kHz?
+Is the frequency range linear, like the knobs seem to have?
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="mix" type="floatRelative" default="0.5">
+            <xs:annotation><xs:documentation>
+The wet/dry mix which controls how much of the effect signal we hear.
+Default: `0.5`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modDepth" type="floatRelative" default="0.2">
+            <xs:annotation><xs:documentation>
+The modulation depth of the effect.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modRate">
+            <xs:annotation><xs:documentation>
+The modulation speed in Hz.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.0" />
+                    <xs:maxInclusive value="10.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="resonance" type="floatRelative" default="0.7" />
+        <xs:attribute name="roomSize" type="floatRelative" default="0.7" />
+
+        <xs:attribute name="stereoOffset" default="0">
+            <xs:annotation><xs:documentation>
+The parameter allows you to introduce delay variations between the left and right channels.
+Half of this amount is subtracted from the left channel's delay time and half of this amount is added to the right channel's delay time.
+For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s, then the actual left channel delay time will be `0.49` s and the actual right channel delay time will be `0.51` s so that the two channels are offset by `0.02` seconds.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="-10" />
+                    <xs:maxInclusive value="10" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="wetLevel" type="floatRelative" default="0.5"/>
+
+    </xs:complexType>
+
+    <xs:simpleType name="effectType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bandpass" />
+            <xs:enumeration value="chorus" />
+            <xs:enumeration value="delay" />
+            <xs:enumeration value="hipass" />
+            <xs:enumeration value="lowpass" />
+            <xs:enumeration value="lowpass_4pl" />
+            <xs:enumeration value="reverb" />
+            <xs:enumeration value="phaser" />
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="midi">
         <xs:sequence>
