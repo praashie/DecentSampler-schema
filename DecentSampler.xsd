@@ -141,12 +141,12 @@ As such, every UI must have at most one `tab` element.
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
-        </xs:sequence>
+        </xs:choice>
 
         <xs:attribute name="name">
             <xs:annotation>
@@ -373,7 +373,7 @@ This is where you specify the samples that make up your sample library.
 This element lives right underneath the top-level `DecentSampler` element.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence maxOccurs="unbounded">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="group">
                 <xs:annotation>
                     <xs:documentation>
@@ -385,7 +385,7 @@ The first group in a file is group `0`, the second is group `1`, etc.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
-                    <xs:sequence>
+                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
                         <xs:element name="sample" type="sample" maxOccurs="unbounded" />
                     </xs:sequence>
 
