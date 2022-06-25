@@ -569,7 +569,6 @@ Example: `3dB`
             <xs:documentation>
 Stereo panning as a number from `-100` to `100`.
 `-100` is panned all the way to the left, 100 is panned all the way to the right.
-This can also be set at the `group` or `groups` levels.
 Default: `0`
             </xs:documentation>
         </xs:annotation>
@@ -630,6 +629,7 @@ Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
         <xs:attribute name="hiVel" type="midi7Bit">
             <xs:annotation>
                 <xs:documentation>
@@ -645,7 +645,6 @@ Default: `127`
  A number from `0.0` to `1.0`.
  `0` means that the pitch will stay the same regardless of what note is played.
  `1` means that the pitch will increase by one semitone when the note increases by one semitone (i.e. normal key pitch tracking).
- This can also be set at the `group` level.
  Default: `1`
                 </xs:documentation>
             </xs:annotation>
