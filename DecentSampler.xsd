@@ -41,7 +41,7 @@ SOFTWARE.
             <xs:choice maxOccurs="unbounded">
                 <xs:element name="ui" type="ui" />
                 <xs:element name="groups" type="groups" minOccurs="1"></xs:element>
-
+                <xs:element name="tags" type="tags"/>
                 <xs:element name="effects" type="effects" />
                 <xs:element name="midi" type="midi" />
             </xs:choice>
@@ -376,6 +376,50 @@ Default: `0`
             </xs:element>
         </xs:sequence>
         <xs:attributeGroup ref="regionSettings" />
+    </xs:complexType>
+
+
+    <xs:complexType name="tags">
+        <xs:annotation>
+            <xs:documentation>
+The `tags` element lives right below your top-level `DecentSampler` element.
+It allows you to specify details about the tags you use throughout your instrument.
+It is however not actually necessary to include a `tags` element for every tag you use.
+You only need to create this if you want to specify additional details about your tags.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="tag">
+                <xs:annotation>
+                    <xs:documentation>
+Underneath the `tags` element, you can have any number of `tag` elements.
+These specify details for each individual tag that you use throughout your sample mapping.
+                    </xs:documentation>
+                </xs:annotation>
+
+                <xs:complexType>
+                    <xs:attribute name="enabled" type="xs:boolean"/>
+
+                    <xs:attribute name="volume">
+                        <xs:annotation>
+                            <xs:documentation>
+A number for `0.0` to `1.0` that specifies the initial volume for a tag.
+Default: `1.0`
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+
+                    <xs:attribute name="polyphony" type="xs:positiveInteger">
+                        <xs:annotation>
+                            <xs:documentation>
+A whole number that specifies the number of voices allowed for this tag.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
 
 
