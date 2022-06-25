@@ -347,6 +347,30 @@ The first group in a file is group `0`, the second is group `1`, etc.
                     <xs:sequence>
                         <xs:element name="sample" type="sample" maxOccurs="unbounded" />
                     </xs:sequence>
+
+                    <xs:attribute name="ampVelTrack" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>
+The degree to which the velocity of the incoming notes affects the volume of the samples in this group.
+`0` = not at all.
+`1` = volume is completely determined by incoming velocity.
+
+When the value is `1`, a velocity of `127` (max velocity) yields a gain `1.0` (full volume),
+a velocity of `63` (half velocity) yields a gain of `0.5` (half volume), etc.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+
+                    <xs:attribute name="groupTuning" type="xs:decimal">
+                        <xs:annotation>
+                            <xs:documentation>
+Group-level pitch adjustment for changing note pitch.
+In semitones.
+For example, `1.0` would be a half-step up and `-1` would a half-step down.
+Default: `0`
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
                     <xs:attributeGroup ref="regionSettings" />
                 </xs:complexType>
             </xs:element>
