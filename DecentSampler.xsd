@@ -286,7 +286,7 @@ TODO
     <xs:complexType name="label">
         <xs:annotation>
             <xs:documentation>
-Specifies a text label.
+Specifies a positioned text label.
             </xs:documentation>
         </xs:annotation>
 
@@ -294,6 +294,27 @@ Specifies a text label.
             <xs:annotation>
                 <xs:documentation>
 The actual text that should be displayed as part of the label.
+A label’s text can also be set dynamically using bindings using the `TEXT` binding parameter name.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="vAlign" type="alignVertical">
+            <xs:annotation>
+                <xs:documentation>
+The vertical alignment of the text within the box described by the width and height attributes.
+Valid values: `top`, `bottom`, `center`.
+Default: `center`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="hAlign" type="alignHorizontal">
+            <xs:annotation>
+                <xs:documentation>
+The horizontal alignment of the text within the box described by the width and height attributes.
+Valid values: `left`, `right`, `center`.
+Default: `center`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -383,7 +404,7 @@ The relative path of the sample file to play for this zone.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="loNote" type="midiNote" default="0">
+        <xs:attribute name="loNote" type="midi7Bit" default="0">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the lowest note for which the zone should be triggered.
@@ -392,7 +413,7 @@ Default: `0`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="hiNote" type="midiNote" default="127">
+        <xs:attribute name="hiNote" type="midi7Bit" default="127">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the highest note for which the zone should be triggered.
@@ -401,10 +422,40 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="rootNote" type="midiNote" use="required">
+        <xs:attribute name="rootNote" type="midi7Bit" use="required">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the root note of the sample.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="start" type="xs:positiveInteger">
+            <xs:annotation>
+                <xs:documentation>
+The frame/sample position of the start of the sample audio.
+This is useful if the sample starts midway through the audio file.
+Default: `0`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="end" type="xs:positiveInteger">
+            <xs:annotation>
+                <xs:documentation>
+The frame/sample position of the end of the sample audio.
+This is useful if the sample starts midway through the audio file.
+Default: the file's length in samples minus 1.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tuning" type="xs:decimal">
+            <xs:annotation>
+                <xs:documentation>
+A fine-tuning number (in semitones) for changing the note pitch.
+Example: `1.0` would be a half-step up.
+Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -413,12 +464,7 @@ The MIDI note number of the root note of the sample.
     </xs:complexType>
 
 
-    <xs:simpleType name="midiNote">
-        <xs:annotation>
-            <xs:documentation>
-A MIDI note number (from 0 to 127)
-            </xs:documentation>
-        </xs:annotation>
+    <xs:simpleType name="midi7Bit">
         <xs:restriction base="xs:integer">
             <xs:minInclusive value="0" />
             <xs:maxInclusive value="127" />
@@ -461,6 +507,7 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
         </xs:restriction>
     </xs:simpleType>
 
+
     <xs:simpleType name="relativeFilePath">
         <xs:annotation>
             <xs:documentation>
@@ -473,6 +520,7 @@ Do not use absolute paths - they break across OS platforms and users.
         </xs:restriction>
     </xs:simpleType>
 
+
     <xs:simpleType name="decibelGain">
         <xs:restriction base="xs:string">
             <xs:pattern value="-?\d+(\.\d*)?dB"></xs:pattern>
@@ -481,7 +529,30 @@ Do not use absolute paths - they break across OS platforms and users.
 
 
     <xs:simpleType name="decibelOrAbsoluteGain">
+        <xs:annotation>
+            <xs:documentation>
+A gain value can be either an absolute factor `0.0-1.0`,
+or a decibel value ending in `dB`.
+Example: `3dB`
+            </xs:documentation>
+        </xs:annotation>
         <xs:union memberTypes="decibelGain xs:decimal" />
+    </xs:simpleType>
+
+
+    <xs:simpleType name="panPercentage">
+        <xs:annotation>
+            <xs:documentation>
+Stereo panning as a number from `-100` to `100`.
+`-100` is panned all the way to the left, 100 is panned all the way to the right.
+This can also be set at the `group` or `groups` levels.
+Default: `0`
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="-100.0" />
+            <xs:maxInclusive value="100.0" />
+        </xs:restriction>
     </xs:simpleType>
 
 
@@ -524,8 +595,45 @@ Do not use absolute paths - they break across OS platforms and users.
 
 <!-- Common attributes for <sample>, <group> and <groups> -->
     <xs:attributeGroup name="regionSettings">
-        <xs:attribute name="volume" type="decibelGain" />
+        <xs:attribute name="volume" type="decibelOrAbsoluteGain" />
+        <xs:attribute name="pan" type="panPercentage" />
+
+        <xs:attribute name="loVel" type="midi7Bit">
+            <xs:annotation>
+                <xs:documentation>
+The lowest velocity for which this zone should be triggered.
+Default: `0`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="hiVel" type="midi7Bit">
+            <xs:annotation>
+                <xs:documentation>
+The highest velocity for which this zone should be triggered.
+Default: `127`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="pitchKeyTrack" type="floatRelative">
+            <xs:annotation>
+                <xs:documentation>
+ A number from `0.0` to `1.0`.
+ `0` means that the pitch will stay the same regardless of what note is played.
+ `1` means that the pitch will increase by one semitone when the note increases by one semitone (i.e. normal key pitch tracking).
+ This can also be set at the `group` level.
+ Default: `1`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attributeGroup ref="adsrEnvelope" />
+
+        <!--
+            Tolerate any other attributes for now, in order to support
+            `loCC` and `hiCC` -prefixed attributes.
+        -->
+        <xs:anyAttribute namespace="##local" processContents="skip"/>
     </xs:attributeGroup>
 
     <xs:attributeGroup name="adsrEnvelope">
