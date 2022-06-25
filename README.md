@@ -1,21 +1,68 @@
-# DecentSampler-schema
-
-XML schema for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) preset (`.dspreset`) files.
+# DecentSampler Unofficial XML schema
+## Let's make `.dspreset` editing... **Decent**!
 
 Making virtual instruments for DecentSampler eventually means some tedious editing of the XML-based `.dspreset` files by hand.
 If your text editor supports XML schemas, you can **super-charge your editing experience**!
 
-![A DecentSampler preset opened in VS Code](images/decentsampler-schema-demo.png)
+### Use context-aware code completion and suggestions
+![Code completion screencast](images/demo_completion.webm)
 
-* Use context-aware code completion and suggestions
-* Access documentation by hovering over a keyword
-* Spot errors with tags, attributes, structure, and incorrectly formatted values
+### See documentation by hovering over a keyword
+
+### Spot errors with tags, attributes, structure, and incorrectly formatted values
+
+## Setup in VS Code
+
+Install [Red Hat's XML editing extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml).
+
+### Try it out!
+
+Paste the following contents in a new text file:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/praashie/DecentSampler-schema/main/DecentSampler.xsd" ?>
+<DecentSampler >
+    <ui width="812" height="375">
+
+    </ui>
+    <groups>
+        <group>
+        
+        </group>
+    </groups>
+</DecentSampler>
+```
+Place your cursor inside the `<group>` tag, and hit <kbd>Ctrl</kbd>+<kbd>Space</kbd>.
+You should see a suggestion
 
 
-## Usage in VS Code
+### 
 
-TODO
+### Associate the schema with all `*.dspreset` files
+
+Open your `settings.json` (instructions here)
+
+```json
+{
+    "xml.fileAssociations": [
+        {
+            "pattern": "**/*.dspreset",
+            "systemId": "https://raw.githubusercontent.com/praashie/DecentSampler-schema/main/DecentSampler.xsd"
+        }
+    ]
+}
+```
+
+## A ...*schema*? For ...DecentSampler? Huh?
+
+This is an unofficial XML schema for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) preset (`.dspreset`) files.
+
+An XML Schema Definition (XSD) is a standard way to describe the expected structure of an XML document.
 
 ## Credits
 
-This schema was kickstarted with [XML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml). Generating a schema from an existing file is a very cool feature!
+Thanks to David Hilowitz for his exciting DecentSampler project.
+This schema has been mostly based on a (quite outdated) document of the DecentSampler file format: https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html
+
+This schema was kickstarted and edited with the VS Code extension [XML by Red Hat](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-xml).
+Impressive XSD-based code completion features are the main inspiration for developing this schema in the first place.
