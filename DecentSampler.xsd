@@ -183,6 +183,10 @@ A user control widget without a built-in label.
             </xs:documentation>
         </xs:annotation>
 
+        <xs:sequence minOccurs="0">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
         <xs:attributeGroup ref="controlProperties" />
         <xs:attributeGroup ref="textProperties" />
         <xs:attributeGroup ref="widgetGeometry" />
@@ -238,20 +242,85 @@ The name of this option.
     </xs:complexType>
 
     <xs:complexType name="binding">
+        <xs:annotation><xs:documentation>
+Adding a binding to a UI control tells the DecentSampler engine that it should take input from a source and use it to change values in another part of the engine.
+An example of this would be a knob which controls the volume of a group or a CC controller that changes an effect parameter.
+        </xs:documentation></xs:annotation>
+
         <xs:attribute name="type" use="required">
-            <xs:annotation>
-                <xs:documentation>
-TODO
-                </xs:documentation>
-            </xs:annotation>
+            <xs:annotation><xs:documentation>
+This tells the engine what type of parameter this is.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="amp" />
+                    <xs:enumeration value="effect" />
+                    <xs:enumeration value="control" />
+                </xs:restriction>
+            </xs:simpleType>
         </xs:attribute>
-        <xs:attribute name="level" use="required" fixed="instrument" />
-        <xs:attribute name="position" type="xs:integer" use="required" />
-        <xs:attribute name="parameter" use="required" />
-        <xs:attribute name="translation" />
-        <xs:attribute name="translationTable" />
-        <xs:attribute name="translationOutputMin" type="xs:integer" />
-        <xs:attribute name="translationOutputMax" type="xs:integer" />
+
+        <xs:attribute name="level" use="required">
+            <xs:annotation><xs:documentation>
+The level (or "scope") at which the binding affects a parameter.
+
+`instrument`: the whole instrument
+`group`: a single group, at the index of the `position` attribute
+`ui`: an UI control or label, at the index of the `position` attribute
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="ui" />
+                    <xs:enumeration value="instrument" />
+                    <xs:enumeration value="group" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="position" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The specific 0-based index of the element to be modified by this binding.
+If you are targeting a group, for example, the first group would be 0, the second group would be 1, etc.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="identifier" type="xs:string">
+            <xs:annotation><xs:documentation>
+A string identifying the specific parameter that you wish to change.
+If you are modulating based on tags, you would put the tag you are targeting here.
+
+&lt;a href=&quot;https://www.decentsamples.com/wp-content/uploads/2020/06/format-documentation.html#appendix-d-how-to-control-parameters-using-tags-example-mic-level-knobs&quot;&gt;
+See DecentSampler documentation, Appendix D for an example.
+&lt;/a&gt;
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="parameter" type="bindingParameterName" use="required" />
+
+        <xs:attribute name="tags">
+            <xs:annotation><xs:documentation>
+A comma-separated list of tags to be modified by this binding.
+This allows you to set values for multiple groups at once by targeting a tag that is assigned to the groups.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="translation" default="linear">
+            <xs:simpleType><xs:restriction base="xs:string">
+                <xs:enumeration value="linear" />
+                <xs:enumeration value="table" />
+                <xs:enumeration value="fixed_value" />
+            </xs:restriction></xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="translationTable" type="translationTableType" default="0,0;1.1,1"/>
+        <xs:attribute name="translationOutputMin" type="xs:decimal" />
+        <xs:attribute name="translationOutputMax" type="xs:decimal" />
+
+        <xs:attribute name="translationValue" type="xs:decimal">
+            <xs:annotation><xs:documentation>
+The parameter value to use when using `translation="fixed_value"`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
 
@@ -266,7 +335,7 @@ Specifies a positioned text label.
             <xs:annotation>
                 <xs:documentation>
 The actual text that should be displayed as part of the label.
-A label’s text can also be set dynamically using bindings using the `TEXT` binding parameter name.
+A label's text can also be set dynamically using bindings using the `TEXT` binding parameter name.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -385,7 +454,7 @@ Default: `1.0`
                         </xs:annotation>
                     </xs:attribute>
 
-                    <xs:attribute name="polyphony" type="xs:positiveInteger">
+                    <xs:attribute name="polyphony" type="xs:nonNegativeInteger">
                         <xs:annotation>
                             <xs:documentation>
 A whole number that specifies the number of voices allowed for this tag.
@@ -537,6 +606,7 @@ MIDI mappings.
         </xs:documentation></xs:annotation>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="cc" type="midiCCElement" />
+            <xs:element name="note" type="midiNoteElement" />
         </xs:sequence>
     </xs:complexType>
 
@@ -551,21 +621,25 @@ Beneath the `cc` element, you can have any number of bindings.
         </xs:documentation></xs:annotation>
 
         <xs:sequence>
-            <xs:element name="binding">
-                <xs:complexType>
-                    <xs:attribute name="level" use="required" />
-                    <xs:attribute name="type" use="required" />
-                    <xs:attribute name="parameter" use="required" />
-                    <xs:attribute name="position" type="xs:integer" use="required" />
-                    <xs:attribute name="translation" use="required" />
-                    <xs:attribute name="translationOutputMin" type="xs:integer" use="required" />
-                    <xs:attribute name="translationOutputMax" type="xs:integer" use="required" />
-                </xs:complexType>
+            <xs:element name="binding" maxOccurs="unbounded">
             </xs:element>
         </xs:sequence>
-        <xs:attribute name="number" type="xs:integer" use="required" />
 
+        <xs:attribute name="number" type="midi7Bit" use="required" />
     </xs:complexType>
+
+
+    <xs:complexType name="midiNoteElement">
+        <xs:annotation><xs:documentation>
+Within the `midi` element, you can have any number of `note` elements.
+These allow you to map specific notes to specific parameters of your instrument.
+To use this functionality, you'll want to add a separate `note` element for each MIDI note you would like to respond to.
+The `note` element has a single required attribute `note=""` which specifies the number (from 0 to 127) of the MIDI note you would like to listen on.
+Beneath the `note` element, you can have any number of bindings.
+        </xs:documentation></xs:annotation>
+        <xs:attribute name="note" type="midi7Bit" use="required" />
+    </xs:complexType>
+
 
     <xs:complexType name="sample">
         <xs:attribute name="path" type="relativeFilePath" use="required">
@@ -602,7 +676,7 @@ The MIDI note number of the root note of the sample.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="start" type="xs:positiveInteger">
+        <xs:attribute name="start" type="xs:nonNegativeInteger" default="0">
             <xs:annotation>
                 <xs:documentation>
 The frame/sample position of the start of the sample audio.
@@ -612,7 +686,7 @@ Default: `0`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="end" type="xs:positiveInteger">
+        <xs:attribute name="end" type="xs:nonNegativeInteger">
             <xs:annotation>
                 <xs:documentation>
 The frame/sample position of the end of the sample audio.
@@ -766,6 +840,58 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+
+    <xs:simpleType name="translationTableType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(-?[0-9.]+,-?[0-9.]+)(;-?[0-9.]+,-?[0-9.]+)*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="bindingParameterName">
+        <xs:restriction base="xs:string">
+
+            <!-- instrument, amp -->
+            <xs:enumeration value="AMP_VOLUME" />
+            <xs:enumeration value="GLOBAL_TUNING" />
+            <xs:enumeration value="PAN" />
+            <xs:enumeration value="AMP_VEL_TRACK" />
+            <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_SUSTAIN" />
+            <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="GLIDE_TIME" />
+
+            <!-- instrument, effect -->
+            <xs:enumeration value="FX_FILTER_FREQUENCY" />
+            <xs:enumeration value="FX_FILTER_RESONANCE" />
+            <xs:enumeration value="FX_REVERB_WET_LEVEL" />
+            <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
+            <xs:enumeration value="FX_REVERB_DAMPING" />
+            <xs:enumeration value="FX_MIX" />
+            <xs:enumeration value="FX_MOD_DEPTH" />
+            <xs:enumeration value="FX_MOD_RATE" />
+            <xs:enumeration value="FX_CENTER_FREQUENCY" />
+            <xs:enumeration value="FX_FEEDBACK" />
+            <xs:enumeration value="FX_DELAY_TIME" />
+            <xs:enumeration value="FX_STEREO_OFFSET" />
+            <xs:enumeration value="FX_WET_LEVEL" />
+
+            <!-- group, amp -->
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="AMP_VOLUME" />
+            <xs:enumeration value="GROUP_TUNING" />
+
+            <!-- tag, amp -->
+            <xs:enumeration value="TAG_ENABLED" />
+            <xs:enumeration value="TAG_VOLUME" />
+
+            <!-- ui, control -->
+            <xs:enumeration value="VALUE" />
+            <xs:enumeration value="TEXT" />
+
+        </xs:restriction>
+    </xs:simpleType>
 <!--
 ================================================================
     Attribute group definitions
