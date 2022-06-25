@@ -604,10 +604,10 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
         <xs:annotation><xs:documentation>
 MIDI mappings.
         </xs:documentation></xs:annotation>
-        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:choice maxOccurs="unbounded">
             <xs:element name="cc" type="midiCCElement" />
             <xs:element name="note" type="midiNoteElement" />
-        </xs:sequence>
+        </xs:choice>
     </xs:complexType>
 
 
