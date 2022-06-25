@@ -1,8 +1,6 @@
 # DecentSampler Unofficial XML schema
 ## Let's make `.dspreset` editing... **Decent**!
 
-This is an unofficial XML schema for  preset (`.dspreset`) files.
-
 Making virtual instruments for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) eventually means some tedious editing of the XML-based `.dspreset` files by hand...
 
 However, if you use a text editor that supports XML schemas, you can **super-charge your editing experience**:
