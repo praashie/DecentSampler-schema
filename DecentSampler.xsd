@@ -79,7 +79,7 @@ Each dspreset should have at most one `ui` element.
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence>
+        <xs:sequence maxOccurs="unbounded">
             <xs:element name="tab" type="tab" />
         </xs:sequence>
 
@@ -170,34 +170,6 @@ For precise UI creation, it may be advisable to use a combination of `control` a
         <xs:sequence>
             <xs:element name="binding" type="binding" />
         </xs:sequence>
-
-        <xs:attribute name="label" type="xs:string" use="required">
-            <xs:annotation>
-                <xs:documentation>
-If `showLabel` is `true`, the actual text that should be displayed above the control
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="showLabel" type="xs:boolean" default="true">
-            <xs:annotation>
-                <xs:documentation>
-A true/false value dictating whether or not a built-in label should be displayed.
-Default: `true` for `labeled-knob` and `false` for `control` elements.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="parameterName" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>
-In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used.
-In such situations, this control will be labeled using the `parameterName`.
-It is good practice to always include a `parameterName`.
-If no `parameterName` is specified and `label` is specified, then that will be used instead.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
 
         <xs:attributeGroup ref="controlProperties" />
         <xs:attributeGroup ref="textProperties" />
@@ -375,6 +347,9 @@ Default: `0`
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+
+        <xs:attribute name="globalTuning" type="xs:decimal" default="0" />
+
         <xs:attributeGroup ref="regionSettings" />
     </xs:complexType>
 
@@ -471,7 +446,7 @@ Default: `400`
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="damping" type="floatRelative" default="0.3"/>
+        <xs:attribute name="damping" type="decimalMultiplier" default="0.3"/>
         <xs:attribute name="delayTime" default="0.7">
             <xs:annotation><xs:documentation>
 The delay time in seconds.
@@ -483,8 +458,8 @@ The delay time in seconds.
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
-        <xs:attribute name="feedback" type="floatRelative" default="0.2" />
-        <xs:attribute name="frequency" type="floatRelative" default="0.3">
+        <xs:attribute name="feedback" type="decimalMultiplier" default="0.2" />
+        <xs:attribute name="frequency" type="decimalMultiplier" default="0.3">
             <xs:annotation><xs:documentation>
 The filter frequency as a number between `0.0` - `1.0`.
 Default: `0.3`
@@ -497,14 +472,14 @@ Very poorly documented!
 Is the frequency range linear, like the knobs seem to have?
             </xs:documentation></xs:annotation>
         </xs:attribute>
-        <xs:attribute name="mix" type="floatRelative" default="0.5">
+        <xs:attribute name="mix" type="decimalMultiplier" default="0.5">
             <xs:annotation><xs:documentation>
 The wet/dry mix which controls how much of the effect signal we hear.
 Default: `0.5`
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="modDepth" type="floatRelative" default="0.2">
+        <xs:attribute name="modDepth" type="decimalMultiplier" default="0.2">
             <xs:annotation><xs:documentation>
 The modulation depth of the effect.
             </xs:documentation></xs:annotation>
@@ -522,8 +497,8 @@ The modulation speed in Hz.
             </xs:simpleType>
         </xs:attribute>
 
-        <xs:attribute name="resonance" type="floatRelative" default="0.7" />
-        <xs:attribute name="roomSize" type="floatRelative" default="0.7" />
+        <xs:attribute name="resonance" type="decimalMultiplier" default="0.7" />
+        <xs:attribute name="roomSize" type="decimalMultiplier" default="0.7" />
 
         <xs:attribute name="stereoOffset" default="0">
             <xs:annotation><xs:documentation>
@@ -539,7 +514,7 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
             </xs:simpleType>
         </xs:attribute>
 
-        <xs:attribute name="wetLevel" type="floatRelative" default="0.5"/>
+        <xs:attribute name="wetLevel" type="decimalMultiplier" default="0.5"/>
 
     </xs:complexType>
 
@@ -557,28 +532,40 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
     </xs:simpleType>
 
     <xs:complexType name="midi">
-        <xs:sequence>
-            <xs:element name="cc">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="binding">
-                            <xs:complexType>
-                                <xs:attribute name="level" use="required" />
-                                <xs:attribute name="type" use="required" />
-                                <xs:attribute name="parameter" use="required" />
-                                <xs:attribute name="position" type="xs:integer" use="required" />
-                                <xs:attribute name="translation" use="required" />
-                                <xs:attribute name="translationOutputMin" type="xs:integer" use="required" />
-                                <xs:attribute name="translationOutputMax" type="xs:integer" use="required" />
-                            </xs:complexType>
-                        </xs:element>
-                    </xs:sequence>
-                    <xs:attribute name="number" type="xs:integer" use="required" />
-                </xs:complexType>
-            </xs:element>
+        <xs:annotation><xs:documentation>
+MIDI mappings.
+        </xs:documentation></xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="cc" type="midiCCElement" />
         </xs:sequence>
     </xs:complexType>
 
+
+    <xs:complexType name="midiCCElement">
+        <xs:annotation><xs:documentation>
+Within the `midi` element, you can have any number of `cc` elements.
+These allow you to map changes in incoming continuous controller messages to specific parameters of your instrument.
+To use this functionality, you'll want to add a separate `cc` element for each CC number you would like to respond to.
+The `cc` element has a single required attribute `number` which specifies the number (from 0 to 127) of the continuous controller you would like to listen on.
+Beneath the `cc` element, you can have any number of bindings. 
+        </xs:documentation></xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="binding">
+                <xs:complexType>
+                    <xs:attribute name="level" use="required" />
+                    <xs:attribute name="type" use="required" />
+                    <xs:attribute name="parameter" use="required" />
+                    <xs:attribute name="position" type="xs:integer" use="required" />
+                    <xs:attribute name="translation" use="required" />
+                    <xs:attribute name="translationOutputMin" type="xs:integer" use="required" />
+                    <xs:attribute name="translationOutputMax" type="xs:integer" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="number" type="xs:integer" use="required" />
+
+    </xs:complexType>
 
     <xs:complexType name="sample">
         <xs:attribute name="path" type="relativeFilePath" use="required">
@@ -685,10 +672,18 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
     </xs:simpleType>
 
 
-    <xs:simpleType name="floatRelative">
+    <xs:simpleType name="decimalMultiplier">
         <xs:restriction base="xs:decimal">
             <xs:minInclusive value="0.0" />
             <xs:maxInclusive value="1.0" />
+        </xs:restriction>
+    </xs:simpleType>
+
+
+
+    <xs:simpleType name="decimalPositive">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0.0" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -782,6 +777,35 @@ Default: `0`
         <xs:attribute name="volume" type="decibelOrAbsoluteGain" />
         <xs:attribute name="pan" type="panPercentage" />
 
+        <xs:attribute name="glideTime" type="decimalPositive">
+            <xs:annotation><xs:documentation>
+The glide/portamento time in seconds.
+A value of `0.0` would mean no portamento.
+You will most likely want to set this globally at the `groups` level.
+Default: `0.0`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="glideMode" default="legato">
+            <xs:annotation><xs:documentation>
+Controls the glide/portamento behavior.
+Possible values are:
+
+`always` (glide is always performed),
+`legato` (glide is performed only when transitioning from one note to another), and
+`off`.
+
+Default: `legato`
+        </xs:documentation></xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="always" />
+                <xs:enumeration value="legato" />
+                <xs:enumeration value="off" />
+            </xs:restriction>
+        </xs:simpleType>
+        </xs:attribute>
+
         <xs:attribute name="loVel" type="midi7Bit">
             <xs:annotation>
                 <xs:documentation>
@@ -800,7 +824,7 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="pitchKeyTrack" type="floatRelative">
+        <xs:attribute name="pitchKeyTrack" type="decimalMultiplier">
             <xs:annotation>
                 <xs:documentation>
  A number from `0.0` to `1.0`.
@@ -837,7 +861,7 @@ The decay time in seconds of the amplitude envelope of this zone.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="sustain" type="floatRelative">
+        <xs:attribute name="sustain" type="decimalMultiplier">
             <xs:annotation>
                 <xs:documentation>
 The sustain level (`0.0` - `1.0`) of the amplitude envelope of this zone.
@@ -939,6 +963,35 @@ Default: `0`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
+        <xs:attribute name="label" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+If `showLabel` is `true`, the actual text that should be displayed above the control
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="showLabel" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+A true/false value dictating whether or not a built-in label should be displayed.
+Default: `true` for `labeled-knob` and `false` for `control` elements.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="parameterName" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+In a situation where the sampler does not have enough room to display the full UI, a shrunken down version of the UI will be used.
+In such situations, this control will be labeled using the `parameterName`.
+It is good practice to always include a `parameterName`.
+If no `parameterName` is specified and `label` is specified, then that will be used instead.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
 
         <xs:attribute name="style" type="controlStyle" default="rotary_vertical_drag" />
 
