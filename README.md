@@ -1,5 +1,8 @@
+
+
 # DecentSampler Unofficial XML schema
-## Let's make `.dspreset` editing... **Decent**!
+## :bulb: Check your presets _right now_ with DSLint: [dslint.fly.dev](https://dslint.fly.dev/)
+### Let's make `.dspreset` editing... **Decent**!
 
 Making virtual instruments for [DecentSampler](https://www.decentsamples.com/product/decent-sampler-plugin/) eventually means some tedious editing of the XML-based `.dspreset` files by hand...
 
