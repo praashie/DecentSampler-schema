@@ -74,6 +74,7 @@ Each dspreset should have at most one `ui` element.
 
         <xs:sequence maxOccurs="unbounded">
             <xs:element name="tab" type="tab" />
+            <xs:element name="keyboard" type="keyboard" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
 
         <xs:attribute name="bgColor" type="hexARGB">
@@ -152,6 +153,42 @@ This is currently not displayed anywhere.
         </xs:attribute>
     </xs:complexType>
 
+    <xs:complexType name="keyboard">
+        <xs:annotation><xs:documentation>
+This is where you specify settings relating to the on-screen keyboard.
+There should be only one `keyboard` element in your preset file.
+At this point, the only settings are color ranges which are specified using `color` sub-elements.
+        </xs:documentation></xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="color">
+                <xs:annotation><xs:documentation>
+You can use `color` elements to change the color of portions of the on-screen keyboard.
+You can have as many `color` elements as you like.
+Only white keys are affected.
+It's worth noting that colors specified in the `color` elements are overlayed on top of the white keys using a 75% transparency, so choose your colors accordingly.
+This is done to preserve the readability of the key labels.
+                </xs:documentation></xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="loNote" type="midi7Bit" use="required">
+                        <xs:annotation><xs:documentation>
+The bottom of the range for which this color should be displayed.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="hiNote" type="midi7Bit" use="required">
+                        <xs:annotation><xs:documentation>
+The top of the range for which this color should be displayed.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="color" type="hexARGB">
+                        <xs:annotation><xs:documentation>
+A hex representation of the ARGB color to be used for this key range.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:complexType name="labeled-knob">
         <xs:annotation>
