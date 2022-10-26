@@ -57,13 +57,6 @@ The dialog box does not show up for iOS users as most of them have auto-updates 
                 </xs:annotation>
             </xs:attribute>
 
-            <xs:attribute name="pluginVersion" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation>
-(undocumented): a possible alternative to `minVersion`, found in some DecentSamples presets.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
         </xs:complexType>
     </xs:element>
 <!--
@@ -146,6 +139,7 @@ As such, every UI must have at most one `tab` element.
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
 
         <xs:attribute name="name">
@@ -364,6 +358,34 @@ Default: `center`
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
+    <xs:complexType name="image">
+        <xs:annotation><xs:documentation>
+Allows you to place a static image into your user interface.
+It lives underneath the `tab` element.
+        </xs:documentation></xs:annotation>
+
+        <xs:attribute name="path" type="relativeFilePath" use="required">
+            <xs:annotation><xs:documentation>
+The relative path of the image file to show in this component.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="aspectRatioMode" default="preserve">
+            <xs:annotation><xs:documentation>
+Whether or not the engine should preserve the aspect ratio of the image.
+Note: regardless of these settings, you still need to specify a width and height for your image element.
+Valid values: `preserve`, `stretch`.
+Default value is `preserve`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="preserve" />
+                    <xs:enumeration value="stretch" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
 
     <xs:complexType name="groups">
         <xs:annotation>
@@ -1338,7 +1360,7 @@ The y position, in pixels, where (0,0) is the top-left corner.
             The documentation specifies width and height as "required", but some presets
             by Hilowitz leave one/both of these undefined for labeled-knobs and controls.
         -->
-        <xs:attribute name="width" type="xs:integer">
+        <xs:attribute name="width" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
 The width of the whole widget, in pixels
@@ -1346,7 +1368,7 @@ The width of the whole widget, in pixels
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="height" type="xs:integer">
+        <xs:attribute name="height" type="xs:integer" use="required">
             <xs:annotation>
                 <xs:documentation>
 The height of the whole widget, in pixels
