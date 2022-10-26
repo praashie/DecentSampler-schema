@@ -962,12 +962,8 @@ Default: `127`
         </xs:attribute>
 
         <xs:attributeGroup ref="adsrEnvelope" />
-
-        <!--
-            Tolerate any other attributes for now, in order to support
-            `loCC` and `hiCC` -prefixed attributes.
-        -->
-        <xs:anyAttribute namespace="##local" processContents="skip"/>
+        <xs:attributeGroup ref="loHiCCGroup" />
+        <xs:attributeGroup ref="roundRobinGroup" />
     </xs:attributeGroup>
 
     <xs:attributeGroup name="adsrEnvelope">
@@ -1007,6 +1003,318 @@ The release time in seconds of the amplitude envelope of this zone.
         <xs:attribute name="decayCurve" type="curveShape" default="100" />
         <xs:attribute name="releaseCurve" type="curveShape" default="100" />
     </xs:attributeGroup>
+    
+    <xs:attributeGroup name="roundRobinGroup">
+
+        <xs:attribute name="seqMode" default="always">
+            <xs:annotation><xs:documentation>
+A value indicating the desired round robin behavior for this sample or group of samples.
+Valid values are `random`, `true_random`, `round_robin`, and `always`.
+            </xs:documentation></xs:annotation>
+
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="random">
+                        <xs:annotation><xs:documentation>
+This causes random samples to be chosen from within the group of samples.
+If there are more than two round robins, then the algorithm makes sure not to hit the same one twice in a row.
+                        </xs:documentation></xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="true_random">
+                        <xs:annotation><xs:documentation>
+This causes random samples to be chosen from within the group of samples.
+                        </xs:documentation></xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="round_robin">
+                        <xs:annotation><xs:documentation>
+This causes samples to be triggered sequentially according to their seqPosition values.
+                        </xs:documentation></xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="always">
+                        <xs:annotation><xs:documentation>
+This just turns round robins off.
+                        </xs:documentation></xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="seqLength" type="xs:nonNegativeInteger" default="0">
+            <xs:annotation><xs:documentation>
+The length of the round robin queue.
+If this is left out, then the engine will try to auto-detect the length of the roudn robin sequence.
+Default: 0
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqPosition" type="xs:positiveInteger" default="1">
+            <xs:annotation><xs:documentation>
+A number indicating this zone’s position in the round robin queue. This can also be set at the `group` level.
+Default: `1`
+            </xs:documentation></xs:annotation>
+            
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <!-- It seems that XML schemas don't support validating attribute names through regex... -->
+    <xs:attributeGroup name="loHiCCGroup">
+        <xs:attribute name="loCC1" type="midi7Bit" />
+        <xs:attribute name="loCC2" type="midi7Bit" />
+        <xs:attribute name="loCC3" type="midi7Bit" />
+        <xs:attribute name="loCC4" type="midi7Bit" />
+        <xs:attribute name="loCC5" type="midi7Bit" />
+        <xs:attribute name="loCC6" type="midi7Bit" />
+        <xs:attribute name="loCC7" type="midi7Bit" />
+        <xs:attribute name="loCC8" type="midi7Bit" />
+        <xs:attribute name="loCC9" type="midi7Bit" />
+        <xs:attribute name="loCC10" type="midi7Bit" />
+        <xs:attribute name="loCC11" type="midi7Bit" />
+        <xs:attribute name="loCC12" type="midi7Bit" />
+        <xs:attribute name="loCC13" type="midi7Bit" />
+        <xs:attribute name="loCC14" type="midi7Bit" />
+        <xs:attribute name="loCC15" type="midi7Bit" />
+        <xs:attribute name="loCC16" type="midi7Bit" />
+        <xs:attribute name="loCC17" type="midi7Bit" />
+        <xs:attribute name="loCC18" type="midi7Bit" />
+        <xs:attribute name="loCC19" type="midi7Bit" />
+        <xs:attribute name="loCC20" type="midi7Bit" />
+        <xs:attribute name="loCC21" type="midi7Bit" />
+        <xs:attribute name="loCC22" type="midi7Bit" />
+        <xs:attribute name="loCC23" type="midi7Bit" />
+        <xs:attribute name="loCC24" type="midi7Bit" />
+        <xs:attribute name="loCC25" type="midi7Bit" />
+        <xs:attribute name="loCC26" type="midi7Bit" />
+        <xs:attribute name="loCC27" type="midi7Bit" />
+        <xs:attribute name="loCC28" type="midi7Bit" />
+        <xs:attribute name="loCC29" type="midi7Bit" />
+        <xs:attribute name="loCC30" type="midi7Bit" />
+        <xs:attribute name="loCC31" type="midi7Bit" />
+        <xs:attribute name="loCC32" type="midi7Bit" />
+        <xs:attribute name="loCC33" type="midi7Bit" />
+        <xs:attribute name="loCC34" type="midi7Bit" />
+        <xs:attribute name="loCC35" type="midi7Bit" />
+        <xs:attribute name="loCC36" type="midi7Bit" />
+        <xs:attribute name="loCC37" type="midi7Bit" />
+        <xs:attribute name="loCC38" type="midi7Bit" />
+        <xs:attribute name="loCC39" type="midi7Bit" />
+        <xs:attribute name="loCC40" type="midi7Bit" />
+        <xs:attribute name="loCC41" type="midi7Bit" />
+        <xs:attribute name="loCC42" type="midi7Bit" />
+        <xs:attribute name="loCC43" type="midi7Bit" />
+        <xs:attribute name="loCC44" type="midi7Bit" />
+        <xs:attribute name="loCC45" type="midi7Bit" />
+        <xs:attribute name="loCC46" type="midi7Bit" />
+        <xs:attribute name="loCC47" type="midi7Bit" />
+        <xs:attribute name="loCC48" type="midi7Bit" />
+        <xs:attribute name="loCC49" type="midi7Bit" />
+        <xs:attribute name="loCC50" type="midi7Bit" />
+        <xs:attribute name="loCC51" type="midi7Bit" />
+        <xs:attribute name="loCC52" type="midi7Bit" />
+        <xs:attribute name="loCC53" type="midi7Bit" />
+        <xs:attribute name="loCC54" type="midi7Bit" />
+        <xs:attribute name="loCC55" type="midi7Bit" />
+        <xs:attribute name="loCC56" type="midi7Bit" />
+        <xs:attribute name="loCC57" type="midi7Bit" />
+        <xs:attribute name="loCC58" type="midi7Bit" />
+        <xs:attribute name="loCC59" type="midi7Bit" />
+        <xs:attribute name="loCC60" type="midi7Bit" />
+        <xs:attribute name="loCC61" type="midi7Bit" />
+        <xs:attribute name="loCC62" type="midi7Bit" />
+        <xs:attribute name="loCC63" type="midi7Bit" />
+        <xs:attribute name="loCC64" type="midi7Bit" />
+        <xs:attribute name="loCC65" type="midi7Bit" />
+        <xs:attribute name="loCC66" type="midi7Bit" />
+        <xs:attribute name="loCC67" type="midi7Bit" />
+        <xs:attribute name="loCC68" type="midi7Bit" />
+        <xs:attribute name="loCC69" type="midi7Bit" />
+        <xs:attribute name="loCC70" type="midi7Bit" />
+        <xs:attribute name="loCC71" type="midi7Bit" />
+        <xs:attribute name="loCC72" type="midi7Bit" />
+        <xs:attribute name="loCC73" type="midi7Bit" />
+        <xs:attribute name="loCC74" type="midi7Bit" />
+        <xs:attribute name="loCC75" type="midi7Bit" />
+        <xs:attribute name="loCC76" type="midi7Bit" />
+        <xs:attribute name="loCC77" type="midi7Bit" />
+        <xs:attribute name="loCC78" type="midi7Bit" />
+        <xs:attribute name="loCC79" type="midi7Bit" />
+        <xs:attribute name="loCC80" type="midi7Bit" />
+        <xs:attribute name="loCC81" type="midi7Bit" />
+        <xs:attribute name="loCC82" type="midi7Bit" />
+        <xs:attribute name="loCC83" type="midi7Bit" />
+        <xs:attribute name="loCC84" type="midi7Bit" />
+        <xs:attribute name="loCC85" type="midi7Bit" />
+        <xs:attribute name="loCC86" type="midi7Bit" />
+        <xs:attribute name="loCC87" type="midi7Bit" />
+        <xs:attribute name="loCC88" type="midi7Bit" />
+        <xs:attribute name="loCC89" type="midi7Bit" />
+        <xs:attribute name="loCC90" type="midi7Bit" />
+        <xs:attribute name="loCC91" type="midi7Bit" />
+        <xs:attribute name="loCC92" type="midi7Bit" />
+        <xs:attribute name="loCC93" type="midi7Bit" />
+        <xs:attribute name="loCC94" type="midi7Bit" />
+        <xs:attribute name="loCC95" type="midi7Bit" />
+        <xs:attribute name="loCC96" type="midi7Bit" />
+        <xs:attribute name="loCC97" type="midi7Bit" />
+        <xs:attribute name="loCC98" type="midi7Bit" />
+        <xs:attribute name="loCC99" type="midi7Bit" />
+        <xs:attribute name="loCC100" type="midi7Bit" />
+        <xs:attribute name="loCC101" type="midi7Bit" />
+        <xs:attribute name="loCC102" type="midi7Bit" />
+        <xs:attribute name="loCC103" type="midi7Bit" />
+        <xs:attribute name="loCC104" type="midi7Bit" />
+        <xs:attribute name="loCC105" type="midi7Bit" />
+        <xs:attribute name="loCC106" type="midi7Bit" />
+        <xs:attribute name="loCC107" type="midi7Bit" />
+        <xs:attribute name="loCC108" type="midi7Bit" />
+        <xs:attribute name="loCC109" type="midi7Bit" />
+        <xs:attribute name="loCC110" type="midi7Bit" />
+        <xs:attribute name="loCC111" type="midi7Bit" />
+        <xs:attribute name="loCC112" type="midi7Bit" />
+        <xs:attribute name="loCC113" type="midi7Bit" />
+        <xs:attribute name="loCC114" type="midi7Bit" />
+        <xs:attribute name="loCC115" type="midi7Bit" />
+        <xs:attribute name="loCC116" type="midi7Bit" />
+        <xs:attribute name="loCC117" type="midi7Bit" />
+        <xs:attribute name="loCC118" type="midi7Bit" />
+        <xs:attribute name="loCC119" type="midi7Bit" />
+        <xs:attribute name="loCC120" type="midi7Bit" />
+        <xs:attribute name="loCC121" type="midi7Bit" />
+        <xs:attribute name="loCC122" type="midi7Bit" />
+        <xs:attribute name="loCC123" type="midi7Bit" />
+        <xs:attribute name="loCC124" type="midi7Bit" />
+        <xs:attribute name="loCC125" type="midi7Bit" />
+        <xs:attribute name="loCC126" type="midi7Bit" />
+        <xs:attribute name="loCC127" type="midi7Bit" />
+
+        <xs:attribute name="hiCC1" type="midi7Bit" />
+        <xs:attribute name="hiCC2" type="midi7Bit" />
+        <xs:attribute name="hiCC3" type="midi7Bit" />
+        <xs:attribute name="hiCC4" type="midi7Bit" />
+        <xs:attribute name="hiCC5" type="midi7Bit" />
+        <xs:attribute name="hiCC6" type="midi7Bit" />
+        <xs:attribute name="hiCC7" type="midi7Bit" />
+        <xs:attribute name="hiCC8" type="midi7Bit" />
+        <xs:attribute name="hiCC9" type="midi7Bit" />
+        <xs:attribute name="hiCC10" type="midi7Bit" />
+        <xs:attribute name="hiCC11" type="midi7Bit" />
+        <xs:attribute name="hiCC12" type="midi7Bit" />
+        <xs:attribute name="hiCC13" type="midi7Bit" />
+        <xs:attribute name="hiCC14" type="midi7Bit" />
+        <xs:attribute name="hiCC15" type="midi7Bit" />
+        <xs:attribute name="hiCC16" type="midi7Bit" />
+        <xs:attribute name="hiCC17" type="midi7Bit" />
+        <xs:attribute name="hiCC18" type="midi7Bit" />
+        <xs:attribute name="hiCC19" type="midi7Bit" />
+        <xs:attribute name="hiCC20" type="midi7Bit" />
+        <xs:attribute name="hiCC21" type="midi7Bit" />
+        <xs:attribute name="hiCC22" type="midi7Bit" />
+        <xs:attribute name="hiCC23" type="midi7Bit" />
+        <xs:attribute name="hiCC24" type="midi7Bit" />
+        <xs:attribute name="hiCC25" type="midi7Bit" />
+        <xs:attribute name="hiCC26" type="midi7Bit" />
+        <xs:attribute name="hiCC27" type="midi7Bit" />
+        <xs:attribute name="hiCC28" type="midi7Bit" />
+        <xs:attribute name="hiCC29" type="midi7Bit" />
+        <xs:attribute name="hiCC30" type="midi7Bit" />
+        <xs:attribute name="hiCC31" type="midi7Bit" />
+        <xs:attribute name="hiCC32" type="midi7Bit" />
+        <xs:attribute name="hiCC33" type="midi7Bit" />
+        <xs:attribute name="hiCC34" type="midi7Bit" />
+        <xs:attribute name="hiCC35" type="midi7Bit" />
+        <xs:attribute name="hiCC36" type="midi7Bit" />
+        <xs:attribute name="hiCC37" type="midi7Bit" />
+        <xs:attribute name="hiCC38" type="midi7Bit" />
+        <xs:attribute name="hiCC39" type="midi7Bit" />
+        <xs:attribute name="hiCC40" type="midi7Bit" />
+        <xs:attribute name="hiCC41" type="midi7Bit" />
+        <xs:attribute name="hiCC42" type="midi7Bit" />
+        <xs:attribute name="hiCC43" type="midi7Bit" />
+        <xs:attribute name="hiCC44" type="midi7Bit" />
+        <xs:attribute name="hiCC45" type="midi7Bit" />
+        <xs:attribute name="hiCC46" type="midi7Bit" />
+        <xs:attribute name="hiCC47" type="midi7Bit" />
+        <xs:attribute name="hiCC48" type="midi7Bit" />
+        <xs:attribute name="hiCC49" type="midi7Bit" />
+        <xs:attribute name="hiCC50" type="midi7Bit" />
+        <xs:attribute name="hiCC51" type="midi7Bit" />
+        <xs:attribute name="hiCC52" type="midi7Bit" />
+        <xs:attribute name="hiCC53" type="midi7Bit" />
+        <xs:attribute name="hiCC54" type="midi7Bit" />
+        <xs:attribute name="hiCC55" type="midi7Bit" />
+        <xs:attribute name="hiCC56" type="midi7Bit" />
+        <xs:attribute name="hiCC57" type="midi7Bit" />
+        <xs:attribute name="hiCC58" type="midi7Bit" />
+        <xs:attribute name="hiCC59" type="midi7Bit" />
+        <xs:attribute name="hiCC60" type="midi7Bit" />
+        <xs:attribute name="hiCC61" type="midi7Bit" />
+        <xs:attribute name="hiCC62" type="midi7Bit" />
+        <xs:attribute name="hiCC63" type="midi7Bit" />
+        <xs:attribute name="hiCC64" type="midi7Bit" />
+        <xs:attribute name="hiCC65" type="midi7Bit" />
+        <xs:attribute name="hiCC66" type="midi7Bit" />
+        <xs:attribute name="hiCC67" type="midi7Bit" />
+        <xs:attribute name="hiCC68" type="midi7Bit" />
+        <xs:attribute name="hiCC69" type="midi7Bit" />
+        <xs:attribute name="hiCC70" type="midi7Bit" />
+        <xs:attribute name="hiCC71" type="midi7Bit" />
+        <xs:attribute name="hiCC72" type="midi7Bit" />
+        <xs:attribute name="hiCC73" type="midi7Bit" />
+        <xs:attribute name="hiCC74" type="midi7Bit" />
+        <xs:attribute name="hiCC75" type="midi7Bit" />
+        <xs:attribute name="hiCC76" type="midi7Bit" />
+        <xs:attribute name="hiCC77" type="midi7Bit" />
+        <xs:attribute name="hiCC78" type="midi7Bit" />
+        <xs:attribute name="hiCC79" type="midi7Bit" />
+        <xs:attribute name="hiCC80" type="midi7Bit" />
+        <xs:attribute name="hiCC81" type="midi7Bit" />
+        <xs:attribute name="hiCC82" type="midi7Bit" />
+        <xs:attribute name="hiCC83" type="midi7Bit" />
+        <xs:attribute name="hiCC84" type="midi7Bit" />
+        <xs:attribute name="hiCC85" type="midi7Bit" />
+        <xs:attribute name="hiCC86" type="midi7Bit" />
+        <xs:attribute name="hiCC87" type="midi7Bit" />
+        <xs:attribute name="hiCC88" type="midi7Bit" />
+        <xs:attribute name="hiCC89" type="midi7Bit" />
+        <xs:attribute name="hiCC90" type="midi7Bit" />
+        <xs:attribute name="hiCC91" type="midi7Bit" />
+        <xs:attribute name="hiCC92" type="midi7Bit" />
+        <xs:attribute name="hiCC93" type="midi7Bit" />
+        <xs:attribute name="hiCC94" type="midi7Bit" />
+        <xs:attribute name="hiCC95" type="midi7Bit" />
+        <xs:attribute name="hiCC96" type="midi7Bit" />
+        <xs:attribute name="hiCC97" type="midi7Bit" />
+        <xs:attribute name="hiCC98" type="midi7Bit" />
+        <xs:attribute name="hiCC99" type="midi7Bit" />
+        <xs:attribute name="hiCC100" type="midi7Bit" />
+        <xs:attribute name="hiCC101" type="midi7Bit" />
+        <xs:attribute name="hiCC102" type="midi7Bit" />
+        <xs:attribute name="hiCC103" type="midi7Bit" />
+        <xs:attribute name="hiCC104" type="midi7Bit" />
+        <xs:attribute name="hiCC105" type="midi7Bit" />
+        <xs:attribute name="hiCC106" type="midi7Bit" />
+        <xs:attribute name="hiCC107" type="midi7Bit" />
+        <xs:attribute name="hiCC108" type="midi7Bit" />
+        <xs:attribute name="hiCC109" type="midi7Bit" />
+        <xs:attribute name="hiCC110" type="midi7Bit" />
+        <xs:attribute name="hiCC111" type="midi7Bit" />
+        <xs:attribute name="hiCC112" type="midi7Bit" />
+        <xs:attribute name="hiCC113" type="midi7Bit" />
+        <xs:attribute name="hiCC114" type="midi7Bit" />
+        <xs:attribute name="hiCC115" type="midi7Bit" />
+        <xs:attribute name="hiCC116" type="midi7Bit" />
+        <xs:attribute name="hiCC117" type="midi7Bit" />
+        <xs:attribute name="hiCC118" type="midi7Bit" />
+        <xs:attribute name="hiCC119" type="midi7Bit" />
+        <xs:attribute name="hiCC120" type="midi7Bit" />
+        <xs:attribute name="hiCC121" type="midi7Bit" />
+        <xs:attribute name="hiCC122" type="midi7Bit" />
+        <xs:attribute name="hiCC123" type="midi7Bit" />
+        <xs:attribute name="hiCC124" type="midi7Bit" />
+        <xs:attribute name="hiCC125" type="midi7Bit" />
+        <xs:attribute name="hiCC126" type="midi7Bit" />
+        <xs:attribute name="hiCC127" type="midi7Bit" />
+    </xs:attributeGroup>
+
 
 <!-- Common attributes for UI widgets -->
     <xs:attributeGroup name="widgetGeometry">
