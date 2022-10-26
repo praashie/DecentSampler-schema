@@ -639,7 +639,7 @@ Within the `midi` element, you can have any number of `cc` elements.
 These allow you to map changes in incoming continuous controller messages to specific parameters of your instrument.
 To use this functionality, you'll want to add a separate `cc` element for each CC number you would like to respond to.
 The `cc` element has a single required attribute `number` which specifies the number (from 0 to 127) of the continuous controller you would like to listen on.
-Beneath the `cc` element, you can have any number of bindings. 
+Beneath the `cc` element, you can have any number of bindings.
         </xs:documentation></xs:annotation>
 
         <xs:sequence>
@@ -851,6 +851,8 @@ Default: `0`
 
     <xs:simpleType name="controlStyle">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="custom_skin_horizontal_drag" />
+            <xs:enumeration value="custom_skin_vertical_drag" />
             <xs:enumeration value="linear_bar" />
             <xs:enumeration value="linear_bar_vertical" />
             <xs:enumeration value="linear_horizontal" />
@@ -1025,7 +1027,7 @@ The release time in seconds of the amplitude envelope of this zone.
         <xs:attribute name="decayCurve" type="curveShape" default="100" />
         <xs:attribute name="releaseCurve" type="curveShape" default="100" />
     </xs:attributeGroup>
-    
+
     <xs:attributeGroup name="roundRobinGroup">
 
         <xs:attribute name="seqMode" default="always">
@@ -1068,13 +1070,13 @@ If this is left out, then the engine will try to auto-detect the length of the r
 Default: 0
             </xs:documentation></xs:annotation>
         </xs:attribute>
-        
+
         <xs:attribute name="seqPosition" type="xs:positiveInteger" default="1">
             <xs:annotation><xs:documentation>
 A number indicating this zone’s position in the round robin queue. This can also be set at the `group` level.
 Default: `1`
             </xs:documentation></xs:annotation>
-            
+
         </xs:attribute>
     </xs:attributeGroup>
 
@@ -1456,6 +1458,42 @@ If no `parameterName` is specified and `label` is specified, then that will be u
         <xs:attribute name="trackForegroundColor" type="hexARGB" />
         <xs:attribute name="trackBackgroundColor" type="hexARGB" />
 
+        <xs:attribute name="customSkinImage" type="relativeFilePath">
+            <xs:annotation><xs:documentation>
+This is path to an image to use for the control.
+This is expected to be a JPEG or PNG in KnobMan format.
+A huge gallery of compatible knobs can be found here (https://www.g200kg.com/en/webknobman/gallery.php).
+&lt;hr /&gt;
+If you are using custom knobs, it’s important that you specify a `style=` value of either `custom_skin_vertical_drag` or `custom_skin_horizontal_drag`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="customSkinNumFrames" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The number of animation frames contained in the KnobMan image pointed to by `customSkinImage`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="customSkinImageOrientation" default="vertical">
+            <xs:annotation><xs:documentation>
+The orientation of the frames within the KnobMan image pointed to by customSkinImage.
+Valid values: `horizontal`, `vertical`.
+Default: `vertical`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="horizontal" />
+                    <xs:enumeration value="vertical" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="mouseDragSensitivity" type="xs:integer">
+            <xs:annotation><xs:documentation>
+An integer number describing how sensitive the control should be to mouse drags.
+The higher the number, the less sensitive the control will be to mouse movements.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
         <xs:attribute name="uid">
             <xs:annotation>
                 <xs:documentation>
