@@ -1399,7 +1399,7 @@ The y position, in pixels, where (0,0) is the top-left corner.
             The documentation specifies width and height as "required", but some presets
             by Hilowitz leave one/both of these undefined for labeled-knobs and controls.
         -->
-        <xs:attribute name="width" type="xs:integer" use="required">
+        <xs:attribute name="width" type="xs:integer">
             <xs:annotation>
                 <xs:documentation>
 The width of the whole widget, in pixels
@@ -1407,7 +1407,7 @@ The width of the whole widget, in pixels
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="height" type="xs:integer" use="required">
+        <xs:attribute name="height" type="xs:integer">
             <xs:annotation>
                 <xs:documentation>
 The height of the whole widget, in pixels
