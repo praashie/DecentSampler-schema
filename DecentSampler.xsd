@@ -1211,6 +1211,25 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="trigger" default="attack">
+            <xs:annotation><xs:documentation>
+`attack` means a sample is played when the note on message is received.
+`release` means the sample is played when the note off message is received (aka a release trigger).
+`first` means that the sample will only be played if no other notes are playing.
+`legato` means that the sample will only be played if some other notes are already playing.
+
+This can also be set at the `&lt;group&gt;` level. Default: `attack`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="attack" />
+                    <xs:enumeration value="release" />
+                    <xs:enumeration value="first" />
+                    <xs:enumeration value="legato" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
         <xs:attributeGroup ref="adsrEnvelope" />
         <xs:attributeGroup ref="adsrCurveSettings" />
         <xs:attributeGroup ref="loHiCCGroup" />
