@@ -643,12 +643,15 @@ The delay time in seconds.
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
+
         <xs:attribute name="feedback" type="decimalMultiplier" default="0.2" />
-        <xs:attribute name="frequency" type="xs:decimal">
+
+        <xs:attribute name="frequency" type="decimalPositive">
             <xs:annotation><xs:documentation>
 Filter cutoff frequency in Hz.
             </xs:documentation></xs:annotation>
         </xs:attribute>
+
         <xs:attribute name="mix" type="decimalMultiplier" default="0.5">
             <xs:annotation><xs:documentation>
 The wet/dry mix which controls how much of the effect signal we hear.
