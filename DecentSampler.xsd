@@ -1149,7 +1149,7 @@ Default: 0
 
         <xs:attribute name="seqPosition" type="xs:positiveInteger" default="1">
             <xs:annotation><xs:documentation>
-A number indicating this zone’s position in the round robin queue. This can also be set at the `group` level.
+A number indicating this zone's position in the round robin queue. This can also be set at the `group` level.
 Default: `1`
             </xs:documentation></xs:annotation>
 
@@ -1157,6 +1157,52 @@ Default: `1`
     </xs:attributeGroup>
 
     <xs:attributeGroup name="loopingGroup">
+        <xs:attribute name="loopStart" type="xs:nonNegativeInteger" default="0">
+            <xs:annotation><xs:documentation>
+The frame/sample position of the start of the sample's loop.
+If this is not specified, but the sample is a wave file with embedded loop markers, those will be used instead.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="loopEnd" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The frame/sample position of the end of the sample's loop.
+If this is not specified, but the sample is a wave file with embedded loop markers, those will be used instead.
+Default: the file's length in samples minus 1.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="loopCrossfade" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+When loop crossfades are used, instead of simply looping at a specific end point, a portion of the audio from before the loop point is faded in just as the audio from the end of the loop is faded out.
+In this way, smooth audio loops can be achieved on samples that weren’t specifically prepared as looping.
+This parameter is used for specifying the length of the crossade region in frames/samples.
+This can also be set at the `&lt;group&gt;` level.
+Default: 0 (crossfades off).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="loopCrossfadeMode">
+            <xs:annotation><xs:documentation>
+This parameter is used to specify the curve used for crossfading when loop crossfades are turned on.
+This can also be set at the `&lt;group&gt;` level.
+Value values: `linear`, `equal_power`.
+Default: `equal_power`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="equal_power" />
+                    <xs:enumeration value="linear" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="loopEnabled" type="xs:boolean">
+            <xs:annotation><xs:documentation>
+A boolean value indicating whether or not the loop should be used.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="silencedByTags" type="tagList">
             <xs:annotation><xs:documentation>
 A command-separated list of tags.
