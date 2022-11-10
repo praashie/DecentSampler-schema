@@ -44,6 +44,7 @@ SOFTWARE.
                 <xs:element name="tags" type="tags"/>
                 <xs:element name="effects" type="effects" />
                 <xs:element name="midi" type="midi" />
+                <xs:element name="modulators" type="modulators"></xs:element>
             </xs:choice>
 
             <xs:attribute name="minVersion" type="xs:string">
@@ -194,6 +195,101 @@ A hex representation of the ARGB color to be used for this key range.
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulators">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="lfo" type="modulatorLFO" />
+            <xs:element name="envelope" type="modulatorEnvelope" />
+        </xs:sequence>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorLFO">
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="shape" use="required">
+            <xs:annotation><xs:documentation>
+Controls the oscillator shape.
+Possible values are `sine`, `square`, `saw`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="sine" />
+                    <xs:enumeration value="square" />
+                    <xs:enumeration value="saw" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="frequency" type="decimalPositive" use="required">
+            <xs:annotation><xs:documentation>
+The speed of the LFO in cycles per second.
+For example, a value of `10` would mean that the waveform repeats ten times per second.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modAmount" type="decimalMultiplier" default="1.0">
+            <xs:annotation><xs:documentation>
+This value between `0` and `1` controls how much the modulation affects the things it is targeting.
+In conventional terms, this is like the modulation depth.
+Default value: `1.0`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="scope" default="global">
+            <xs:annotation><xs:documentation>
+Whether or not this LFO exists for all notes or whether each keypress gets its own LFO.
+Possible values are `global` (default for LFOs) and `voice`.
+If `voice` is chosen, a new LFO is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorEnvelope">
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attributeGroup ref="adsrEnvelope" />
+
+        <xs:attribute name="modAmount" type="decimalMultiplier" default="1.0">
+            <xs:annotation><xs:documentation>
+This value between `0` and `1` controls how much the modulation affects the things it is targeting.
+In conventional terms, this is like the modulation depth.
+Default value: `1.0`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="scope" default="voice">
+            <xs:annotation><xs:documentation>
+Whether or not this envelope exists for all notes or whether each keypress gets its own envelope.
+Possible values are `global` and `voice` (default for envelopes).
+If `voice` is chosen, a new envelope is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
     </xs:complexType>
 
 <!--=================================-->
@@ -1112,6 +1208,7 @@ Default: `127`
         </xs:attribute>
 
         <xs:attributeGroup ref="adsrEnvelope" />
+        <xs:attributeGroup ref="adsrCurveSettings" />
         <xs:attributeGroup ref="loHiCCGroup" />
         <xs:attributeGroup ref="roundRobinGroup" />
         <xs:attributeGroup ref="loopingGroup" />
@@ -1120,26 +1217,22 @@ Default: `127`
 <!--=================================-->
 
     <xs:attributeGroup name="adsrEnvelope">
-        <xs:attribute name="attack" type="xs:decimal">
-            <xs:annotation>
-                <xs:documentation>
-The attack time in seconds of the amplitude envelope of this zone.
-            </xs:documentation>
-            </xs:annotation>
+        <xs:attribute name="attack" type="decimalPositive">
+            <xs:annotation><xs:documentation>
+The length in seconds of the attack portion of the ADSR envelope.
+            </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="decay" type="xs:decimal">
-            <xs:annotation>
-                <xs:documentation>
-The decay time in seconds of the amplitude envelope of this zone.
-                </xs:documentation>
-            </xs:annotation>
+        <xs:attribute name="decay" type="decimalPositive">
+            <xs:annotation><xs:documentation>
+The length in seconds of the decay portion of the ADSR envelope.
+            </xs:documentation></xs:annotation>
         </xs:attribute>
 
         <xs:attribute name="sustain" type="decimalMultiplier">
             <xs:annotation>
                 <xs:documentation>
-The sustain level (`0.0` - `1.0`) of the amplitude envelope of this zone.
+The height of the sustain portion of the ADSR envelope.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -1147,11 +1240,15 @@ The sustain level (`0.0` - `1.0`) of the amplitude envelope of this zone.
         <xs:attribute name="release" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
-The release time in seconds of the amplitude envelope of this zone.
+The length in seconds of the release portion of the ADSR envelope.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+    </xs:attributeGroup>
 
+<!--=================================-->
+
+    <xs:attributeGroup name="adsrCurveSettings">
         <xs:attribute name="attackCurve" type="curveShape" default="-100" />
         <xs:attribute name="decayCurve" type="curveShape" default="100" />
         <xs:attribute name="releaseCurve" type="curveShape" default="100" />
