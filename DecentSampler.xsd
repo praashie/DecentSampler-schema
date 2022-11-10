@@ -59,11 +59,13 @@ The dialog box does not show up for iOS users as most of them have auto-updates 
 
         </xs:complexType>
     </xs:element>
+
 <!--
 ================================================================
     Type definitions
 ================================================================
 -->
+
     <xs:complexType name="ui">
         <xs:annotation>
             <xs:documentation>
@@ -126,6 +128,7 @@ Recommended value: `375`
         <xs:attribute name="bgMode" /> <!-- bgMode="top_left" -->
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="tab">
         <xs:annotation>
@@ -153,6 +156,8 @@ This is currently not displayed anywhere.
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
+
+<!--=================================-->
 
     <xs:complexType name="keyboard">
         <xs:annotation><xs:documentation>
@@ -191,6 +196,8 @@ A hex representation of the ARGB color to be used for this key range.
         </xs:sequence>
     </xs:complexType>
 
+<!--=================================-->
+
     <xs:complexType name="labeled-knob">
         <xs:annotation>
             <xs:documentation>
@@ -208,6 +215,8 @@ For precise UI creation, it may be advisable to use a combination of `control` a
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
+<!--=================================-->
+
     <xs:complexType name="control">
         <xs:annotation>
             <xs:documentation>
@@ -224,6 +233,7 @@ A user control widget without a built-in label.
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="menu">
         <xs:annotation>
@@ -250,6 +260,7 @@ A value of `0` means that no item is selected.
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="option">
         <xs:annotation>
@@ -272,6 +283,8 @@ The name of this option.
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
+
+<!--=================================-->
 
     <xs:complexType name="binding">
         <xs:annotation><xs:documentation>
@@ -389,6 +402,7 @@ The parameter value to use when using `translation="fixed_value"`.
         </xs:attribute>
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="label">
         <xs:annotation>
@@ -430,6 +444,8 @@ Default: `center`
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
+<!--=================================-->
+
     <xs:complexType name="image">
         <xs:annotation><xs:documentation>
 Allows you to place a static image into your user interface.
@@ -458,6 +474,8 @@ Default value is `preserve`.
         </xs:attribute>
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
+
+<!--=================================-->
 
     <xs:complexType name="groups">
         <xs:annotation>
@@ -516,6 +534,7 @@ Default: `0`
         <xs:attributeGroup ref="regionSettings" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="tags">
         <xs:annotation>
@@ -560,6 +579,7 @@ A whole number that specifies the number of voices allowed for this tag.
         </xs:sequence>
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="effects">
         <xs:annotation>
@@ -572,6 +592,8 @@ Within the `effects` element, you can have any number of `effect` sub-elements.
             <xs:element name="effect" type="effect" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
+
+<!--=================================-->
 
     <xs:complexType name="effect">
         <xs:annotation>
@@ -673,6 +695,8 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
 
     </xs:complexType>
 
+<!--=================================-->
+
     <xs:simpleType name="effectType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="bandpass" />
@@ -686,6 +710,8 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
+
     <xs:complexType name="midi">
         <xs:annotation><xs:documentation>
 MIDI mappings.
@@ -696,6 +722,7 @@ MIDI mappings.
         </xs:choice>
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="midiCCElement">
         <xs:annotation><xs:documentation>
@@ -713,6 +740,7 @@ Beneath the `cc` element, you can have any number of bindings.
         <xs:attribute name="number" type="midi7Bit" use="required" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="midiNoteElement">
         <xs:annotation><xs:documentation>
@@ -725,6 +753,7 @@ Beneath the `note` element, you can have any number of bindings.
         <xs:attribute name="note" type="midi7Bit" use="required" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:complexType name="sample">
         <xs:attribute name="path" type="relativeFilePath" use="required">
@@ -794,6 +823,7 @@ Default: `0`
         <xs:attributeGroup ref="regionSettings" />
     </xs:complexType>
 
+<!--=================================-->
 
     <xs:simpleType name="midi7Bit">
         <xs:restriction base="xs:integer">
@@ -802,6 +832,7 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="curveShape">
         <xs:annotation>
@@ -816,6 +847,7 @@ A value from -100 to 100 that determines the shape of a curve.
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="hexARGB">
         <xs:annotation>
@@ -830,6 +862,7 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="decimalMultiplier">
         <xs:restriction base="xs:decimal">
@@ -838,7 +871,7 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
         </xs:restriction>
     </xs:simpleType>
 
-
+<!--=================================-->
 
     <xs:simpleType name="decimalPositive">
         <xs:restriction base="xs:decimal">
@@ -846,6 +879,7 @@ The first two digits are a hexadecimal representation of alpha level with 00 bei
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="relativeFilePath">
         <xs:annotation>
@@ -859,6 +893,7 @@ Do not use absolute paths - they break across OS platforms and users.
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="decibelGain">
         <xs:restriction base="xs:string">
@@ -866,6 +901,7 @@ Do not use absolute paths - they break across OS platforms and users.
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="decibelOrAbsoluteGain">
         <xs:annotation>
@@ -878,6 +914,7 @@ Example: `3dB`
         <xs:union memberTypes="decibelGain xs:decimal" />
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="panPercentage">
         <xs:annotation>
@@ -893,6 +930,7 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="alignVertical">
         <xs:restriction base="xs:string">
@@ -902,6 +940,7 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="alignHorizontal">
         <xs:restriction base="xs:string">
@@ -911,6 +950,7 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="controlStyle">
         <xs:restriction base="xs:string">
@@ -927,6 +967,7 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
 
     <xs:simpleType name="translationTableType">
         <xs:restriction base="xs:string">
@@ -934,17 +975,23 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
+
     <xs:simpleType name="tagList">
         <xs:restriction base="xs:string">
             <xs:pattern value="(,?\w+)*" />
         </xs:restriction>
     </xs:simpleType>
 
+<!--=================================-->
+
     <xs:simpleType name="midiNoteList">
         <xs:restriction base="xs:string">
             <xs:pattern value="(,?\d{1,3})+" />
         </xs:restriction>
     </xs:simpleType>
+
+<!--=================================-->
 
     <xs:simpleType name="bindingParameterName">
         <xs:restriction base="xs:string">
@@ -990,6 +1037,7 @@ Default: `0`
 
         </xs:restriction>
     </xs:simpleType>
+
 <!--
 ================================================================
     Attribute group definitions
@@ -1066,6 +1114,8 @@ Default: `127`
         <xs:attributeGroup ref="loopingGroup" />
     </xs:attributeGroup>
 
+<!--=================================-->
+
     <xs:attributeGroup name="adsrEnvelope">
         <xs:attribute name="attack" type="xs:decimal">
             <xs:annotation>
@@ -1103,6 +1153,8 @@ The release time in seconds of the amplitude envelope of this zone.
         <xs:attribute name="decayCurve" type="curveShape" default="100" />
         <xs:attribute name="releaseCurve" type="curveShape" default="100" />
     </xs:attributeGroup>
+
+<!--=================================-->
 
     <xs:attributeGroup name="roundRobinGroup">
 
@@ -1155,6 +1207,8 @@ Default: `1`
 
         </xs:attribute>
     </xs:attributeGroup>
+
+<!--=================================-->
 
     <xs:attributeGroup name="loopingGroup">
         <xs:attribute name="loopStart" type="xs:nonNegativeInteger" default="0">
@@ -1246,6 +1300,8 @@ Format: This can be a positive or negative whole number.
             </xs:documentation></xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
+
+<!--=================================-->
 
     <!-- It seems that XML schemas don't support validating attribute names through regex... -->
     <xs:attributeGroup name="loHiCCGroup">
@@ -1506,6 +1562,7 @@ Format: This can be a positive or negative whole number.
         <xs:attribute name="hiCC127" type="midi7Bit" />
     </xs:attributeGroup>
 
+<!--=================================-->
 
 <!-- Common attributes for UI widgets -->
     <xs:attributeGroup name="widgetGeometry">
@@ -1546,6 +1603,7 @@ The height of the whole widget, in pixels
         </xs:attribute>
     </xs:attributeGroup>
 
+<!--=================================-->
 
 <!-- Common attributes for UI text -->
     <xs:attributeGroup name="textProperties">
@@ -1559,6 +1617,8 @@ Default: `12`
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
+
+<!--=================================-->
 
 <!-- Common attributes for UI controls -->
     <xs:attributeGroup name="controlProperties">
