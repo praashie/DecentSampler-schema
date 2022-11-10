@@ -121,8 +121,9 @@ Recommended value: `375`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="layoutMode" />
-        <xs:attribute name="bgMode" />
+        <!-- Seen in the boilerplate example -->
+        <xs:attribute name="layoutMode" /> <!-- layoutMode="relative" -->
+        <xs:attribute name="bgMode" /> <!-- bgMode="top_left" -->
     </xs:complexType>
 
 
@@ -587,17 +588,9 @@ The delay time in seconds.
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="feedback" type="decimalMultiplier" default="0.2" />
-        <xs:attribute name="frequency" type="decimalMultiplier" default="0.3">
+        <xs:attribute name="frequency" type="xs:decimal">
             <xs:annotation><xs:documentation>
-The filter frequency as a number between `0.0` - `1.0`.
-Default: `0.3`
-
-Very poorly documented!
-
-"0.0 is not damped, 1.0 is fully damped"
-
-"Fully damped" in the case of LP? Is the range 20 Hz - 20 kHz?
-Is the frequency range linear, like the knobs seem to have?
+Filter cutoff frequency in Hz.
             </xs:documentation></xs:annotation>
         </xs:attribute>
         <xs:attribute name="mix" type="decimalMultiplier" default="0.5">
