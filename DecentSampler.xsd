@@ -328,7 +328,7 @@ See DecentSampler documentation, Appendix D for an example.
 
         <xs:attribute name="parameter" type="bindingParameterName" use="required" />
 
-        <xs:attribute name="tags">
+        <xs:attribute name="tags" type="tagList">
             <xs:annotation><xs:documentation>
 A comma-separated list of tags to be modified by this binding.
 This allows you to set values for multiple groups at once by targeting a tag that is assigned to the groups.
@@ -663,7 +663,7 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
         <xs:annotation><xs:documentation>
 MIDI mappings.
         </xs:documentation></xs:annotation>
-        <xs:choice maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="cc" type="midiCCElement" />
             <xs:element name="note" type="midiNoteElement" />
         </xs:choice>
@@ -680,8 +680,7 @@ Beneath the `cc` element, you can have any number of bindings.
         </xs:documentation></xs:annotation>
 
         <xs:sequence>
-            <xs:element name="binding" maxOccurs="unbounded">
-            </xs:element>
+            <xs:element name="binding" type="binding" maxOccurs="unbounded" />
         </xs:sequence>
 
         <xs:attribute name="number" type="midi7Bit" use="required" />
@@ -908,6 +907,17 @@ Default: `0`
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="tagList">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(,?\w+)*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="midiNoteList">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(,?\d{1,3})+" />
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="bindingParameterName">
         <xs:restriction base="xs:string">
@@ -961,6 +971,7 @@ Default: `0`
 
 <!-- Common attributes for <sample>, <group> and <groups> -->
     <xs:attributeGroup name="regionSettings">
+        <xs:attribute name="tags" type="tagList" />
         <xs:attribute name="volume" type="decibelOrAbsoluteGain" />
         <xs:attribute name="pan" type="panPercentage" />
 
@@ -983,14 +994,14 @@ Possible values are:
 `off`.
 
 Default: `legato`
-        </xs:documentation></xs:annotation>
-        <xs:simpleType>
-            <xs:restriction base="xs:string">
-                <xs:enumeration value="always" />
-                <xs:enumeration value="legato" />
-                <xs:enumeration value="off" />
-            </xs:restriction>
-        </xs:simpleType>
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="always" />
+                    <xs:enumeration value="legato" />
+                    <xs:enumeration value="off" />
+                </xs:restriction>
+            </xs:simpleType>
         </xs:attribute>
 
         <xs:attribute name="loVel" type="midi7Bit">
@@ -1025,6 +1036,7 @@ Default: `127`
         <xs:attributeGroup ref="adsrEnvelope" />
         <xs:attributeGroup ref="loHiCCGroup" />
         <xs:attributeGroup ref="roundRobinGroup" />
+        <xs:attributeGroup ref="loopingGroup" />
     </xs:attributeGroup>
 
     <xs:attributeGroup name="adsrEnvelope">
@@ -1114,6 +1126,51 @@ A number indicating this zone’s position in the round robin queue. This can al
 Default: `1`
             </xs:documentation></xs:annotation>
 
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:attributeGroup name="loopingGroup">
+        <xs:attribute name="silencedByTags" type="tagList">
+            <xs:annotation><xs:documentation>
+A command-separated list of tags.
+Example: `tags="rt,mic1"`.
+
+If a sample containing one of these tags gets triggered, then this sample will be stopped.
+This is useful when setting up drums as it will allow you mute one hi-hat when another hi-hat plays.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="silencingMode" default="fast">
+            <xs:annotation><xs:documentation>
+Controls how quickly voices get silenced.
+`fast` = immediately; `normal` = triggers the sample's release phase.
+This second option, when used in conjunction with the release attribute, allows you to specify a longer release time.
+
+Values: `fast`, `normal`. Default: `fast`
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="normal" />
+                    <xs:enumeration value="fast" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="previousNotes" type="midiNoteList">
+            <xs:annotation><xs:documentation>
+Only play this sample if the previously triggered note equals one of these notes.
+Format: a comma-separated list of MIDI note numbers (from 1 to 127) of the note.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="legatoInterval" type="xs:integer">
+            <xs:annotation><xs:documentation>
+This is similar to the `previousNote` attribute.
+This causes the engine to only play the sample if the previously triggered note is exactly this semitone distance from the previous note.
+
+For example, if the note for which this sample is being triggered is a C3 and the `legatoInterval` is set to `-2`, then the sample will only play if the previous note was a D3 because D3 minus 2 semitones equals C3.
+Format: This can be a positive or negative whole number.
+            </xs:documentation></xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 
