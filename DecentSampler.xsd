@@ -467,7 +467,7 @@ See DecentSampler documentation, Appendix D for an example.
 
         <xs:attribute name="parameter" type="bindingParameterName" use="required" />
 
-        <xs:attribute name="tags" type="tagList">
+        <xs:attribute name="tags">
             <xs:annotation><xs:documentation>
 A comma-separated list of tags to be modified by this binding.
 This allows you to set values for multiple groups at once by targeting a tag that is assigned to the groups.
@@ -1076,14 +1076,6 @@ Default: `0`
 
 <!--=================================-->
 
-    <xs:simpleType name="tagList">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(,?\w+)*" />
-        </xs:restriction>
-    </xs:simpleType>
-
-<!--=================================-->
-
     <xs:simpleType name="humanReadableNoteName">
         <xs:restriction base="xs:string">
             <xs:pattern value="[A-G]#?[0-9]" />
@@ -1157,7 +1149,7 @@ Default: `0`
 
 <!-- Common attributes for <sample>, <group> and <groups> -->
     <xs:attributeGroup name="regionSettings">
-        <xs:attribute name="tags" type="tagList" />
+        <xs:attribute name="tags" />
         <xs:attribute name="volume" type="decibelOrAbsoluteGain" />
         <xs:attribute name="pan" type="panPercentage" />
 
@@ -1370,7 +1362,7 @@ A boolean value indicating whether or not the loop should be used.
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="silencedByTags" type="tagList">
+        <xs:attribute name="silencedByTags">
             <xs:annotation><xs:documentation>
 A command-separated list of tags.
 Example: `tags="rt,mic1"`.
