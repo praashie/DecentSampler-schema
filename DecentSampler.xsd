@@ -863,7 +863,7 @@ The relative path of the sample file to play for this zone.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="loNote" type="midi7Bit" default="0">
+        <xs:attribute name="loNote" type="noteNameOrNumber" default="0">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the lowest note for which the zone should be triggered.
@@ -872,7 +872,7 @@ Default: `0`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="hiNote" type="midi7Bit" default="127">
+        <xs:attribute name="hiNote" type="noteNameOrNumber" default="127">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the highest note for which the zone should be triggered.
@@ -881,7 +881,7 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="rootNote" type="midi7Bit" use="required">
+        <xs:attribute name="rootNote" type="noteNameOrNumber" use="required">
             <xs:annotation>
                 <xs:documentation>
 The MIDI note number of the root note of the sample.
@@ -1080,6 +1080,18 @@ Default: `0`
         <xs:restriction base="xs:string">
             <xs:pattern value="(,?\w+)*" />
         </xs:restriction>
+    </xs:simpleType>
+
+<!--=================================-->
+
+    <xs:simpleType name="humanReadableNoteName">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-G]#?[0-9]" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="noteNameOrNumber">
+        <xs:union memberTypes="midi7Bit humanReadableNoteName" />
     </xs:simpleType>
 
 <!--=================================-->
@@ -1382,6 +1394,13 @@ Values: `fast`, `normal`. Default: `fast`
                     <xs:enumeration value="fast" />
                 </xs:restriction>
             </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="previousNote" type="noteNameOrNumber">
+            <xs:annotation><xs:documentation>
+Only play this sample if the previously triggered note equals this note.
+Format: Either a MIDI note number `1-127`, or a note name like `A4` or `G#3`.
+            </xs:documentation></xs:annotation>
         </xs:attribute>
 
         <xs:attribute name="previousNotes" type="midiNoteList">
