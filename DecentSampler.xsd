@@ -690,7 +690,7 @@ Within the `effects` element, you can have any number of `effect` sub-elements.
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="effect" type="effect" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
