@@ -75,10 +75,10 @@ Each dspreset should have at most one `ui` element.
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence maxOccurs="unbounded">
+        <xs:choice maxOccurs="unbounded">
             <xs:element name="tab" type="tab" />
             <xs:element name="keyboard" type="keyboard" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>
+        </xs:choice>
 
         <xs:attribute name="bgColor" type="hexARGB">
             <xs:annotation>
