@@ -200,10 +200,10 @@ A hex representation of the ARGB color to be used for this key range.
 <!--=================================-->
 
     <xs:complexType name="modulators">
-        <xs:sequence maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="lfo" type="modulatorLFO" />
             <xs:element name="envelope" type="modulatorEnvelope" />
-        </xs:sequence>
+        </xs:choice>
     </xs:complexType>
 
 <!--=================================-->
