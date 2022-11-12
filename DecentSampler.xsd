@@ -408,12 +408,14 @@ The level (or "scope") at which the binding affects a parameter.
 `instrument`: the whole instrument
 `group`: a single group, at the index of the `position` attribute
 `ui`: an UI control or label, at the index of the `position` attribute
+`tag`: all sample regions with the given tag.
             </xs:documentation></xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="ui" />
                     <xs:enumeration value="instrument" />
                     <xs:enumeration value="group" />
+                    <xs:enumeration value="tag" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
