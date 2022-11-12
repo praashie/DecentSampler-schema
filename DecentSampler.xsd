@@ -418,7 +418,7 @@ The level (or "scope") at which the binding affects a parameter.
             </xs:simpleType>
         </xs:attribute>
 
-        <xs:attribute name="position" type="xs:nonNegativeInteger" use="required">
+        <xs:attribute name="position" type="xs:nonNegativeInteger">
             <xs:annotation><xs:documentation>
 The specific 0-based index of the element to be modified by this binding.
 If you are targeting a group, for example, the first group would be 0, the second group would be 1, etc.
@@ -454,7 +454,7 @@ It is a specific 0-based index of the modulator be modified by this binding.
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="identifier" type="xs:string" use="required">
+        <xs:attribute name="identifier" type="xs:string">
             <xs:annotation><xs:documentation>
 A string identifying the specific parameter that you wish to change.
 If you are modulating based on tags, you would put the tag you are targeting here.
@@ -654,7 +654,7 @@ These specify details for each individual tag that you use throughout your sampl
                 <xs:complexType>
                     <xs:attribute name="enabled" type="xs:boolean"/>
 
-                    <xs:attribute name="volume">
+                    <xs:attribute name="volume" type="decimalMultiplier">
                         <xs:annotation>
                             <xs:documentation>
 A number for `0.0` to `1.0` that specifies the initial volume for a tag.
