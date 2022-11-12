@@ -302,7 +302,7 @@ For precise UI creation, it may be advisable to use a combination of `control` a
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="binding" type="binding" />
         </xs:sequence>
 
@@ -320,9 +320,10 @@ A user control widget without a built-in label.
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence minOccurs="0">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="binding" type="binding" />
         </xs:sequence>
+
 
         <xs:attributeGroup ref="controlProperties" />
         <xs:attributeGroup ref="textProperties" />
