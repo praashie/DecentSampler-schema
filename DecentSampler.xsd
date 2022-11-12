@@ -1628,9 +1628,6 @@ The center frequency (in Hz) of the phaser all-pass filters modulation.
 Default: `400`
             </xs:documentation></xs:annotation>
         </xs:attribute>
-
-        <xs:attributeGroup ref="effectModAttributes" />
-
     </xs:attributeGroup>
 
 <!--=================================-->
