@@ -339,7 +339,7 @@ In order for your drop-down menu to have options, it must contain `option` eleme
             </xs:documentation>
         </xs:annotation>
 
-        <xs:sequence>
+        <xs:sequence maxOccurs="unbounded">
             <xs:element name="option" type="option"></xs:element>
         </xs:sequence>
 
