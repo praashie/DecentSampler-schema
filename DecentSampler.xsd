@@ -595,9 +595,10 @@ The first group in a file is group `0`, the second is group `1`, etc.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
-                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element name="sample" type="sample" maxOccurs="unbounded" />
-                    </xs:sequence>
+                        <xs:element name="effects" type="groupEffects" maxOccurs="1"/>
+                    </xs:choice>
 
                     <xs:attribute name="ampVelTrack" type="xs:decimal">
                         <xs:annotation>
@@ -693,13 +694,21 @@ Within the `effects` element, you can have any number of `effect` sub-elements.
         </xs:annotation>
 
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="effect" type="effect" maxOccurs="unbounded" />
+            <xs:element name="effect" type="globalEffect" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
 <!--=================================-->
 
-    <xs:complexType name="effect">
+    <xs:complexType name="groupEffects">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="effect" type="groupEffect" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="globalEffect">
         <xs:annotation>
             <xs:documentation>
 
@@ -728,77 +737,24 @@ Attributes: `damping`, `roomSize`, `wetLevel`
 
         <xs:attribute name="type" type="effectType" use="required" />
 
-        <xs:attribute name="centerFrequency" type="xs:decimal" default="400">
-            <xs:annotation><xs:documentation>
-The center frequency (in Hz) of the phaser all-pass filters modulation.
-Default: `400`
-            </xs:documentation></xs:annotation>
-        </xs:attribute>
+        <xs:attributeGroup ref="effectChorusAttributes" />
+        <xs:attributeGroup ref="effectDelayAttributes" />
+        <xs:attributeGroup ref="effectFilterAttributes" />
+        <xs:attributeGroup ref="effectGainAttributes" />
+        <xs:attributeGroup ref="effectPhaserAttributes" />
+        <xs:attributeGroup ref="effectReverbAttributes" />
 
-        <xs:attribute name="damping" type="decimalMultiplier" default="0.3"/>
-        <xs:attribute name="delayTime" default="0.7">
-            <xs:annotation><xs:documentation>
-The delay time in seconds.
-            </xs:documentation></xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:decimal">
-                    <xs:minInclusive value="0" />
-                    <xs:maxInclusive value="10" />
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
+    </xs:complexType>
 
-        <xs:attribute name="feedback" type="decimalMultiplier" default="0.2" />
+<!--=================================-->
 
-        <xs:attribute name="frequency" type="decimalPositive">
-            <xs:annotation><xs:documentation>
-Filter cutoff frequency in Hz.
-            </xs:documentation></xs:annotation>
-        </xs:attribute>
+    <xs:complexType name="groupEffect">
 
-        <xs:attribute name="mix" type="decimalMultiplier" default="0.5">
-            <xs:annotation><xs:documentation>
-The wet/dry mix which controls how much of the effect signal we hear.
-Default: `0.5`
-            </xs:documentation></xs:annotation>
-        </xs:attribute>
+        <xs:attribute name="type" type="groupEffectType" use="required" />
 
-        <xs:attribute name="modDepth" type="decimalMultiplier" default="0.2">
-            <xs:annotation><xs:documentation>
-The modulation depth of the effect.
-            </xs:documentation></xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="modRate">
-            <xs:annotation><xs:documentation>
-The modulation speed in Hz.
-            </xs:documentation></xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:decimal">
-                    <xs:minInclusive value="0.0" />
-                    <xs:maxInclusive value="10.0" />
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-
-        <xs:attribute name="resonance" type="decimalMultiplier" default="0.7" />
-        <xs:attribute name="roomSize" type="decimalMultiplier" default="0.7" />
-
-        <xs:attribute name="stereoOffset" default="0">
-            <xs:annotation><xs:documentation>
-The parameter allows you to introduce delay variations between the left and right channels.
-Half of this amount is subtracted from the left channel's delay time and half of this amount is added to the right channel's delay time.
-For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s, then the actual left channel delay time will be `0.49` s and the actual right channel delay time will be `0.51` s so that the two channels are offset by `0.02` seconds.
-            </xs:documentation></xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:decimal">
-                    <xs:minInclusive value="-10" />
-                    <xs:maxInclusive value="10" />
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
-
-        <xs:attribute name="wetLevel" type="decimalMultiplier" default="0.5"/>
+        <xs:attributeGroup ref="effectChorusAttributes" />
+        <xs:attributeGroup ref="effectFilterAttributes" />
+        <xs:attributeGroup ref="effectGainAttributes" />
 
     </xs:complexType>
 
@@ -809,11 +765,24 @@ For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s,
             <xs:enumeration value="bandpass" />
             <xs:enumeration value="chorus" />
             <xs:enumeration value="delay" />
+            <xs:enumeration value="gain" />
             <xs:enumeration value="hipass" />
             <xs:enumeration value="lowpass" />
             <xs:enumeration value="lowpass_4pl" />
             <xs:enumeration value="reverb" />
             <xs:enumeration value="phaser" />
+        </xs:restriction>
+    </xs:simpleType>
+
+<!--=================================-->
+
+    <xs:simpleType name="groupEffectType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bandpass" />
+            <xs:enumeration value="chorus" />
+            <xs:enumeration value="hipass" />
+            <xs:enumeration value="lowpass" />
+            <xs:enumeration value="lowpass_4pl" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -1607,6 +1576,130 @@ This can be ignored.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectFilterAttributes">
+        <xs:attribute name="resonance" type="decimalMultiplier" default="0.7" />
+
+        <xs:attribute name="frequency" type="decimalPositive">
+            <xs:annotation><xs:documentation>
+Filter cutoff frequency in Hz.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectReverbAttributes">
+
+        <xs:attribute name="roomSize" type="decimalMultiplier" default="0.7" />
+        <xs:attribute name="damping" type="decimalMultiplier" default="0.3"/>
+        <xs:attribute name="wetLevel" type="decimalMultiplier" default="0.5"/>
+
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectChorusAttributes">
+
+        <xs:attributeGroup ref="effectModAttributes" />
+
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectPhaserAttributes">
+        <xs:attribute name="feedback" default="0.7">
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="-1.0" />
+                    <xs:maxInclusive value="1.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="centerFrequency" type="xs:decimal" default="400">
+            <xs:annotation><xs:documentation>
+The center frequency (in Hz) of the phaser all-pass filters modulation.
+Default: `400`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="effectModAttributes" />
+
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectDelayAttributes">
+
+        <xs:attribute name="delayTime" default="0.7">
+            <xs:annotation><xs:documentation>
+The delay time in seconds.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0" />
+                    <xs:maxInclusive value="10" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="stereoOffset" default="0">
+            <xs:annotation><xs:documentation>
+The parameter allows you to introduce delay variations between the left and right channels.
+Half of this amount is subtracted from the left channel's delay time and half of this amount is added to the right channel's delay time.
+For example, if the delayTime is `0.5` seconds and the stereoOffset is `0.02` s, then the actual left channel delay time will be `0.49` s and the actual right channel delay time will be `0.51` s so that the two channels are offset by `0.02` seconds.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="-10" />
+                    <xs:maxInclusive value="10" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectGainAttributes">
+        <xs:attribute name="level" default="0.7">
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.0" />
+                    <xs:maxInclusive value="8.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectModAttributes">
+        <xs:attribute name="mix" type="decimalMultiplier" default="0.5" />
+
+        <xs:attribute name="modDepth" type="decimalMultiplier" default="0.2">
+            <xs:annotation><xs:documentation>
+The modulation depth of the effect.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modRate">
+            <xs:annotation><xs:documentation>
+The modulation speed in Hz.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.0" />
+                    <xs:maxInclusive value="10.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
     </xs:attributeGroup>
 
 <!--=================================-->
