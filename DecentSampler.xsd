@@ -652,6 +652,12 @@ These specify details for each individual tag that you use throughout your sampl
                 </xs:annotation>
 
                 <xs:complexType>
+                    <xs:attribute name="name">
+                        <xs:annotation><xs:documentation>
+The tag name.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
+
                     <xs:attribute name="enabled" type="xs:boolean"/>
 
                     <xs:attribute name="volume" type="decimalMultiplier">
