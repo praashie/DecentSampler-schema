@@ -601,19 +601,6 @@ The first group in a file is group `0`, the second is group `1`, etc.
                         <xs:element name="effects" type="groupEffects" maxOccurs="1"/>
                     </xs:choice>
 
-                    <xs:attribute name="ampVelTrack" type="xs:decimal">
-                        <xs:annotation>
-                            <xs:documentation>
-The degree to which the velocity of the incoming notes affects the volume of the samples in this group.
-`0` = not at all.
-`1` = volume is completely determined by incoming velocity.
-
-When the value is `1`, a velocity of `127` (max velocity) yields a gain `1.0` (full volume),
-a velocity of `63` (half velocity) yields a gain of `0.5` (half volume), etc.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-
                     <xs:attribute name="groupTuning" type="xs:decimal">
                         <xs:annotation>
                             <xs:documentation>
@@ -837,32 +824,6 @@ Beneath the `note` element, you can have any number of bindings.
             <xs:annotation>
                 <xs:documentation>
 The relative path of the sample file to play for this zone.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="loNote" type="noteNameOrNumber" default="0">
-            <xs:annotation>
-                <xs:documentation>
-The MIDI note number of the lowest note for which the zone should be triggered.
-Default: `0`
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="hiNote" type="noteNameOrNumber" default="127">
-            <xs:annotation>
-                <xs:documentation>
-The MIDI note number of the highest note for which the zone should be triggered.
-Default: `127`
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-
-        <xs:attribute name="rootNote" type="noteNameOrNumber" use="required">
-            <xs:annotation>
-                <xs:documentation>
-The MIDI note number of the root note of the sample.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -1160,6 +1121,32 @@ Default: `legato`
             </xs:simpleType>
         </xs:attribute>
 
+        <xs:attribute name="loNote" type="noteNameOrNumber" default="0">
+            <xs:annotation>
+                <xs:documentation>
+The MIDI note number of the lowest note for which the zone should be triggered.
+Default: `0`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="hiNote" type="noteNameOrNumber" default="127">
+            <xs:annotation>
+                <xs:documentation>
+The MIDI note number of the highest note for which the zone should be triggered.
+Default: `127`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="rootNote" type="noteNameOrNumber">
+            <xs:annotation>
+                <xs:documentation>
+The MIDI note number of the root note of the sample.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="loVel" type="midi7Bit">
             <xs:annotation>
                 <xs:documentation>
@@ -1174,6 +1161,19 @@ Default: `0`
                 <xs:documentation>
 The highest velocity for which this zone should be triggered.
 Default: `127`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="ampVelTrack" type="xs:decimal">
+            <xs:annotation>
+                <xs:documentation>
+The degree to which the velocity of the incoming notes affects the volume of the samples in this group.
+`0` = not at all.
+`1` = volume is completely determined by incoming velocity.
+
+When the value is `1`, a velocity of `127` (max velocity) yields a gain `1.0` (full volume),
+a velocity of `63` (half velocity) yields a gain of `0.5` (half volume), etc.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
