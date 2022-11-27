@@ -786,6 +786,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
         <xs:attributeGroup ref="effectGainAttributes" />
         <xs:attributeGroup ref="effectPhaserAttributes" />
         <xs:attributeGroup ref="effectReverbAttributes" />
+        <xs:attributeGroup ref="effectConvolutionReverbAttributes" />
 
     </xs:complexType>
 
@@ -1679,6 +1680,12 @@ Filter cutoff frequency in Hz.
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectConvolutionReverbAttributes">
+        <xs:attribute name="irFile" type="relativeFilePath" />
     </xs:attributeGroup>
 
 <!--=================================-->
