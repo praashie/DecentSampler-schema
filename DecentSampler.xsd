@@ -141,11 +141,12 @@ As such, every UI must have at most one `tab` element.
         </xs:annotation>
 
         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="button" type="button" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
-            <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
 
         <xs:attribute name="name">
@@ -309,6 +310,56 @@ For precise UI creation, it may be advisable to use a combination of `control` a
         <xs:attributeGroup ref="controlProperties" />
         <xs:attributeGroup ref="textProperties" />
         <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="button">
+        <xs:annotation><xs:documentation>
+The `&lt;button&gt;` element allows you to create a button within your UI.
+There are two styles of buttons: `text` buttons and `image` buttons.
+        </xs:documentation></xs:annotation>
+
+        <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="state" type="buttonState" />
+        </xs:sequence>
+
+        <xs:attribute name="style" default="text">
+            <xs:annotation><xs:documentation>
+The type of button we want.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="text" />
+                    <xs:enumeration value="image" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="value" type="xs:nonNegativeInteger" default="0">
+            <xs:annotation><xs:documentation>
+The is the 0-based index of the button state that is currently selected.
+A value of 0 means that the first state is active.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="buttonImageAttributes" />
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="buttonState">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="name">
+            <xs:annotation><xs:documentation>
+The text to display on a text button when this state is active.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        <xs:attributeGroup ref="buttonImageAttributes" />
     </xs:complexType>
 
 <!--=================================-->
@@ -1582,6 +1633,38 @@ This is an internally generated value.
 This can be ignored.
                 </xs:documentation>
             </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="buttonImageAttributes">
+
+        <xs:attribute name="mainImage" type="relativeFilePath">
+            <xs:annotation><xs:documentation>
+For `image` buttons only.
+The path of the main image to display for this button.
+
+This can set at the state level so that it only applies to a specific state.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="hoverImage" type="relativeFilePath">
+            <xs:annotation><xs:documentation>
+For `image` buttons only.
+The path of the image to display when the user hovers their mouse over this button.
+
+This can be set at the state level so that it only applies to a specific state.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="clickImage" type="relativeFilePath">
+            <xs:annotation><xs:documentation>
+For `image` buttons only.
+The path of the image to display when the user clicks down on this button.
+
+This can be set at the state level so that it only applies to a specific state.
+            </xs:documentation></xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 
