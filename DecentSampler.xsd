@@ -494,7 +494,7 @@ Valid values are `true` and `false`. This is only looked at if translation is se
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="translationValue" type="xs:decimal">
+        <xs:attribute name="translationValue">
             <xs:annotation><xs:documentation>
 The parameter value to use when using `translation="fixed_value"`.
             </xs:documentation></xs:annotation>
@@ -708,6 +708,9 @@ There are currently only a handful effects available although more could definit
 &lt;h3&gt; `chorus` &lt;/h3&gt;
 Attributes: `mix`, `modDepth`, `modRate`
 
+&lt;h3&gt; `convolution` &lt;/h3&gt;
+Attributes: `irFile`, `mix`
+
 &lt;h3&gt; `delay` &lt;/h3&gt;
 Attributes: `delayTime`, `feedback`, `stereoOffset`, `wetLevel`
 
@@ -719,6 +722,7 @@ Attributes: `centerFrequency`, `feedback`, `mix`, `modDepth`, `modRate`
 
 &lt;h3&gt; `reverb` &lt;/h3&gt;
 Attributes: `damping`, `roomSize`, `wetLevel`
+
 
             </xs:documentation>
         </xs:annotation>
@@ -752,6 +756,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
         <xs:restriction base="xs:string">
             <xs:enumeration value="bandpass" />
             <xs:enumeration value="chorus" />
+            <xs:enumeration value="convolution" />
             <xs:enumeration value="delay" />
             <xs:enumeration value="gain" />
             <xs:enumeration value="hipass" />
@@ -1055,6 +1060,7 @@ Default: `0`
             <xs:enumeration value="FX_REVERB_WET_LEVEL" />
             <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
             <xs:enumeration value="FX_REVERB_DAMPING" />
+            <xs:enumeration value="FX_IR_FILE" />
             <xs:enumeration value="FX_MIX" />
             <xs:enumeration value="FX_MOD_DEPTH" />
             <xs:enumeration value="FX_MOD_RATE" />
