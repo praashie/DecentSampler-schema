@@ -35,7 +35,7 @@ SOFTWARE.
     Main structure
 ================================================================
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.6.12">
     <xs:element name="DecentSampler">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
