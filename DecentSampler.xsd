@@ -58,6 +58,14 @@ The dialog box does not show up for iOS users as most of them have auto-updates 
                 </xs:annotation>
             </xs:attribute>
 
+            <xs:attribute name="pluginVersion" use="prohibited">
+                <xs:annotation>
+                    <xs:documentation>
+Use `minVersion` instead. This attribute seems to be incorrectly documented.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+
         </xs:complexType>
     </xs:element>
 
