@@ -1,4 +1,5 @@
 {
+    "redhat.telemetry.enabled": false,
     "xml.fileAssociations": [
         {
             "pattern": "**/*.dspreset",
