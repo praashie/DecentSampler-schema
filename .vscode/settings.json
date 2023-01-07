@@ -1,0 +1,8 @@
+{
+    "xml.fileAssociations": [
+        {
+            "pattern": "**/*.dspreset",
+            "systemId": "./DecentSampler.xsd"
+        }
+    ]
+}
