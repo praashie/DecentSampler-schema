@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://raw.githubusercontent.com/praashie/DecentSampler-schema/main/DecentSampler.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
 <!--
     Boilerplate .dspreset file
     Source: https://www.decentsamples.com/docs/format-documentation.html#appendix-c-boilerplate-dspreset-file
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <DecentSampler minVersion="1.0.0">
   <ui width="812" height="375" layoutMode="relative"
       bgMode="top_left">
