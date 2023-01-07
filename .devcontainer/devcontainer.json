@@ -12,7 +12,8 @@
 		},
 		"codespaces": {
 			"openFiles": [
-				"README.md",
+				"README_CODESPACES.md",
+				"presets/boilerplate.dspreset"
 			]
 		}
 	}
