@@ -881,6 +881,11 @@ To use this functionality, you'll want to add a separate `note` element for each
 The `note` element has a single required attribute `note=""` which specifies the number (from 0 to 127) of the MIDI note you would like to listen on.
 Beneath the `note` element, you can have any number of bindings.
         </xs:documentation></xs:annotation>
+
+        <xs:sequence>
+            <xs:element name="binding" type="binding" maxOccurs="unbounded" />
+        </xs:sequence>
+
         <xs:attribute name="note" type="midi7Bit" use="required" />
     </xs:complexType>
 
