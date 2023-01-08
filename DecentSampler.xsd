@@ -778,7 +778,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
             </xs:documentation>
         </xs:annotation>
 
-        <xs:attribute name="type" type="effectType" use="required" />
+        <xs:attribute name="type" type="globalEffectType" use="required" />
 
         <xs:attributeGroup ref="effectChorusAttributes" />
         <xs:attributeGroup ref="effectDelayAttributes" />
@@ -787,6 +787,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
         <xs:attributeGroup ref="effectPhaserAttributes" />
         <xs:attributeGroup ref="effectReverbAttributes" />
         <xs:attributeGroup ref="effectConvolutionReverbAttributes" />
+        <xs:attributeGroup ref="effectWaveShapeFolderAttributes" />
 
     </xs:complexType>
 
@@ -799,12 +800,13 @@ Attributes: `damping`, `roomSize`, `wetLevel`
         <xs:attributeGroup ref="effectChorusAttributes" />
         <xs:attributeGroup ref="effectFilterAttributes" />
         <xs:attributeGroup ref="effectGainAttributes" />
+        <xs:attributeGroup ref="effectWaveShapeFolderAttributes" />
 
     </xs:complexType>
 
 <!--=================================-->
 
-    <xs:simpleType name="effectType">
+    <xs:simpleType name="globalEffectType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="bandpass" />
             <xs:enumeration value="chorus" />
@@ -814,8 +816,10 @@ Attributes: `damping`, `roomSize`, `wetLevel`
             <xs:enumeration value="hipass" />
             <xs:enumeration value="lowpass" />
             <xs:enumeration value="lowpass_4pl" />
-            <xs:enumeration value="reverb" />
             <xs:enumeration value="phaser" />
+            <xs:enumeration value="reverb" />
+            <xs:enumeration value="wave_folder" />
+            <xs:enumeration value="wave_shaper" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -825,9 +829,12 @@ Attributes: `damping`, `roomSize`, `wetLevel`
         <xs:restriction base="xs:string">
             <xs:enumeration value="bandpass" />
             <xs:enumeration value="chorus" />
+            <xs:enumeration value="gain" />
             <xs:enumeration value="hipass" />
             <xs:enumeration value="lowpass" />
             <xs:enumeration value="lowpass_4pl" />
+            <xs:enumeration value="wave_folder" />
+            <xs:enumeration value="wave_shaper" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -1723,6 +1730,47 @@ Filter cutoff frequency in Hz.
 The center frequency (in Hz) of the phaser all-pass filters modulation.
 Default: `400`
             </xs:documentation></xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="effectWaveShapeFolderAttributes">
+        <xs:attribute name="drive" default="1" >
+            <xs:annotation><xs:documentation>
+`wave_shaper` and `wave_folder`: The amount of distortion.
+This really just controls the volume of the input signal.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="1.0" />
+                    <xs:maxInclusive value="1000.0" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="driveBoost" type="decimalMultiplier" default="1">
+            <xs:annotation><xs:documentation>
+`wave_shaper`: Introduces an extra gain boost to the drive.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="outputLevel" type="decimalMultiplier" default="0.1">
+            <xs:annotation><xs:documentation>
+`wave_shaper`: The linear output level of the signal.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="threshold" default="0.25">
+            <xs:annotation><xs:documentation>
+`wave_folder`: The amplitude above which wave folding should take place.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:decimal">
+                    <xs:minInclusive value="0.0" />
+                    <xs:maxExclusive value="10.0" />
+                </xs:restriction>
+            </xs:simpleType>
         </xs:attribute>
     </xs:attributeGroup>
 
