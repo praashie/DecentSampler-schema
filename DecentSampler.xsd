@@ -1108,26 +1108,34 @@ Default: `0`
             <xs:enumeration value="PAN" />
             <xs:enumeration value="AMP_VEL_TRACK" />
             <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_ATTACK_CURVE" />
             <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_DECAY_CURVE" />
             <xs:enumeration value="ENV_SUSTAIN" />
             <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="ENV_RELEASE_CURVE" />
             <xs:enumeration value="GLIDE_TIME" />
 
             <!-- instrument, effect -->
+            <xs:enumeration value="FX_CENTER_FREQUENCY" />
+            <xs:enumeration value="FX_DELAY_TIME" />
+            <xs:enumeration value="FX_DRIVE" />
+            <xs:enumeration value="FX_DRIVE_BOOST" />
+            <xs:enumeration value="FX_FEEDBACK" />
             <xs:enumeration value="FX_FILTER_FREQUENCY" />
             <xs:enumeration value="FX_FILTER_RESONANCE" />
-            <xs:enumeration value="FX_REVERB_WET_LEVEL" />
-            <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
-            <xs:enumeration value="FX_REVERB_DAMPING" />
             <xs:enumeration value="FX_IR_FILE" />
             <xs:enumeration value="FX_MIX" />
             <xs:enumeration value="FX_MOD_DEPTH" />
             <xs:enumeration value="FX_MOD_RATE" />
-            <xs:enumeration value="FX_CENTER_FREQUENCY" />
-            <xs:enumeration value="FX_FEEDBACK" />
-            <xs:enumeration value="FX_DELAY_TIME" />
+            <xs:enumeration value="FX_OUTPUT_LEVEL" />
+            <xs:enumeration value="FX_REVERB_DAMPING" />
+            <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
+            <xs:enumeration value="FX_REVERB_WET_LEVEL" />
             <xs:enumeration value="FX_STEREO_OFFSET" />
+            <xs:enumeration value="FX_THRESHOLD" />
             <xs:enumeration value="FX_WET_LEVEL" />
+            <xs:enumeration value="LEVEL" />
 
             <!-- group, amp -->
             <xs:enumeration value="ENABLED" />
@@ -1139,8 +1147,15 @@ Default: `0`
             <xs:enumeration value="TAG_VOLUME" />
 
             <!-- ui, control -->
-            <xs:enumeration value="VALUE" />
+            <xs:enumeration value="PATH" />
             <xs:enumeration value="TEXT" />
+            <xs:enumeration value="VALUE" />
+
+            <!-- modulator, instrument -->
+            <xs:enumeration value="MOD_AMOUNT" />
+            <xs:enumeration value="FREQUENCY" />
+            <xs:enumeration value="FREQUENCY" />
+
 
         </xs:restriction>
     </xs:simpleType>
