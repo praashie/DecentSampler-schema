@@ -443,12 +443,15 @@ An example of this would be a knob which controls the volume of a group or a CC 
         <xs:attribute name="type" use="required">
             <xs:annotation><xs:documentation>
 This tells the engine what type of parameter this is.
+
+TODO: `"general"` is not mentioned as a valid value, but is present in multiple documentation examples!
             </xs:documentation></xs:annotation>
             <xs:simpleType>
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="amp" />
-                    <xs:enumeration value="effect" />
                     <xs:enumeration value="control" />
+                    <xs:enumeration value="effect" />
+                    <xs:enumeration value="general" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
