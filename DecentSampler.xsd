@@ -420,7 +420,7 @@ In order to have your `option` elements actually do something useful, you need t
         </xs:annotation>
 
         <xs:sequence>
-            <xs:element name="binding" type="binding" minOccurs="0" />
+            <xs:element name="binding" type="binding" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
 
         <xs:attribute name="name">
