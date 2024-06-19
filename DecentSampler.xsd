@@ -146,6 +146,7 @@ As such, every UI must have at most one `tab` element.
             <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="labeledKnob" type="labeledKnob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
 
@@ -300,6 +301,25 @@ If `voice` is chosen, a new envelope is started each time a new note is pressed.
             <xs:documentation>
 A user control widget containing a built-in label.
 For precise UI creation, it may be advisable to use a combination of `control` and `label` elements rather than `labeled-knob`.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attributeGroup ref="controlProperties" />
+        <xs:attributeGroup ref="textProperties" />
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="labeledKnob">
+        <xs:annotation>
+            <xs:documentation>
+A user control widget containing a built-in label.
+For precise UI creation, it may be advisable to use a combination of `control` and `label` elements rather than `labeledKnob`.
             </xs:documentation>
         </xs:annotation>
 
@@ -1597,7 +1617,7 @@ If `showLabel` is `true`, the actual text that should be displayed above the con
             <xs:annotation>
                 <xs:documentation>
 A true/false value dictating whether or not a built-in label should be displayed.
-Default: `true` for `labeled-knob` and `false` for `control` elements.
+Default: `true` for `labeled-knob`/`labeledKnob` and `false` for `control` elements.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
