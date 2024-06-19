@@ -425,6 +425,16 @@ A value of `0` means that no item is selected.
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="parameterName" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+This is the parameter name that will be used when this control is displayed by a host DAW. Right now, 
+the DecentSampler plug-in doesn't expose menu controls for automation, but it is still good practice
+to always include a `parameterName`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
@@ -1592,6 +1602,15 @@ Default: `0`
                 <xs:documentation>
 The maximum value of your control.
 Default: `1`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="defaultValue" type="xs:decimal" default="0.5">
+            <xs:annotation>
+                <xs:documentation>
+The default value of your control. When the user double-clicks on this control in the UI, the value will be reset to this.
+Default: `0.5`
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
