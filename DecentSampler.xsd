@@ -169,7 +169,7 @@ There should be only one `keyboard` element in your preset file.
 At this point, the only settings are color ranges which are specified using `color` sub-elements.
         </xs:documentation></xs:annotation>
 
-        <xs:sequence maxOccurs="unbounded">
+        <xs:sequence maxOccurs="unbounded" minOccurs="0">
             <xs:element name="color">
                 <xs:annotation><xs:documentation>
 You can use `color` elements to change the color of portions of the on-screen keyboard.
