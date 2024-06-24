@@ -684,6 +684,11 @@ The first group in a file is group `0`, the second is group `1`, etc.
                         <xs:element name="sample" type="sample" maxOccurs="unbounded" />
                         <xs:element name="effects" type="groupEffects" maxOccurs="1"/>
                     </xs:choice>
+                    <xs:attribute name="name">
+                        <xs:annotation><xs:documentation>
+            A group name. This is only used for your internal reference.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
 
                     <xs:attribute name="groupTuning" type="xs:decimal">
                         <xs:annotation>
