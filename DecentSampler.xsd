@@ -700,11 +700,17 @@ Default: `0`
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="enabled" type="xs:boolean">
+                        <xs:annotation><xs:documentation>
+Whether or not this group is enabled.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attributeGroup ref="regionSettings" />
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
 
+        
         <xs:attribute name="globalTuning" type="xs:decimal" default="0" />
 
         <xs:attributeGroup ref="regionSettings" />
