@@ -1294,6 +1294,12 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="ampEnvEnabled" type="xs:boolean">
+            <xs:annotation><xs:documentation>
+                Whether or not the amplitude envelope is enabled.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="ampVelTrack" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
