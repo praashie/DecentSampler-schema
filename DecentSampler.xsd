@@ -681,8 +681,8 @@ The first group in a file is group `0`, the second is group `1`, etc.
                 </xs:annotation>
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="sample" type="sample" maxOccurs="unbounded" />
-                        <xs:element name="effects" type="groupEffects" maxOccurs="1"/>
+                        <xs:element name="sample" type="sample" minOccurs="0" maxOccurs="unbounded" />
+                        <xs:element name="effects" type="groupEffects" minOccurs="0" maxOccurs="1"/>
                     </xs:choice>
                     <xs:attribute name="name">
                         <xs:annotation><xs:documentation>
