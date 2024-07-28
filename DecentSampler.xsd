@@ -146,6 +146,7 @@ As such, every UI must have at most one `tab` element.
             <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="labeledKnob" type="labeledKnob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
 
@@ -168,7 +169,7 @@ There should be only one `keyboard` element in your preset file.
 At this point, the only settings are color ranges which are specified using `color` sub-elements.
         </xs:documentation></xs:annotation>
 
-        <xs:sequence maxOccurs="unbounded">
+        <xs:sequence maxOccurs="unbounded" minOccurs="0">
             <xs:element name="color">
                 <xs:annotation><xs:documentation>
 You can use `color` elements to change the color of portions of the on-screen keyboard.
@@ -314,6 +315,25 @@ For precise UI creation, it may be advisable to use a combination of `control` a
 
 <!--=================================-->
 
+    <xs:complexType name="labeledKnob">
+        <xs:annotation>
+            <xs:documentation>
+A user control widget containing a built-in label.
+For precise UI creation, it may be advisable to use a combination of `control` and `label` elements rather than `labeledKnob`.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attributeGroup ref="controlProperties" />
+        <xs:attributeGroup ref="textProperties" />
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
     <xs:complexType name="button">
         <xs:annotation><xs:documentation>
 The `&lt;button&gt;` element allows you to create a button within your UI.
@@ -405,6 +425,16 @@ A value of `0` means that no item is selected.
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="parameterName" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+This is the parameter name that will be used when this control is displayed by a host DAW. Right now, 
+the DecentSampler plug-in doesn't expose menu controls for automation, but it is still good practice
+to always include a `parameterName`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
 
@@ -420,7 +450,7 @@ In order to have your `option` elements actually do something useful, you need t
         </xs:annotation>
 
         <xs:sequence>
-            <xs:element name="binding" type="binding" minOccurs="0" />
+            <xs:element name="binding" type="binding" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
 
         <xs:attribute name="name">
@@ -651,9 +681,14 @@ The first group in a file is group `0`, the second is group `1`, etc.
                 </xs:annotation>
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
-                        <xs:element name="sample" type="sample" maxOccurs="unbounded" />
-                        <xs:element name="effects" type="groupEffects" maxOccurs="1"/>
+                        <xs:element name="sample" type="sample" minOccurs="0" maxOccurs="unbounded" />
+                        <xs:element name="effects" type="groupEffects" minOccurs="0" maxOccurs="1"/>
                     </xs:choice>
+                    <xs:attribute name="name">
+                        <xs:annotation><xs:documentation>
+            A group name. This is only used for your internal reference.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
 
                     <xs:attribute name="groupTuning" type="xs:decimal">
                         <xs:annotation>
@@ -665,11 +700,17 @@ Default: `0`
                             </xs:documentation>
                         </xs:annotation>
                     </xs:attribute>
+                    <xs:attribute name="enabled" type="xs:boolean">
+                        <xs:annotation><xs:documentation>
+Whether or not this group is enabled.
+                        </xs:documentation></xs:annotation>
+                    </xs:attribute>
                     <xs:attributeGroup ref="regionSettings" />
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
 
+        
         <xs:attribute name="globalTuning" type="xs:decimal" default="0" />
 
         <xs:attributeGroup ref="regionSettings" />
@@ -1253,6 +1294,12 @@ Default: `127`
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="ampEnvEnabled" type="xs:boolean">
+            <xs:annotation><xs:documentation>
+                Whether or not the amplitude envelope is enabled.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="ampVelTrack" type="xs:decimal">
             <xs:annotation>
                 <xs:documentation>
@@ -1576,6 +1623,15 @@ Default: `1`
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="defaultValue" type="xs:decimal" default="0.5">
+            <xs:annotation>
+                <xs:documentation>
+The default value of your control. When the user double-clicks on this control in the UI, the value will be reset to this.
+Default: `0.5`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="value" type="xs:decimal" default="0">
             <xs:annotation>
                 <xs:documentation>
@@ -1597,7 +1653,7 @@ If `showLabel` is `true`, the actual text that should be displayed above the con
             <xs:annotation>
                 <xs:documentation>
 A true/false value dictating whether or not a built-in label should be displayed.
-Default: `true` for `labeled-knob` and `false` for `control` elements.
+Default: `true` for `labeled-knob`/`labeledKnob` and `false` for `control` elements.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
