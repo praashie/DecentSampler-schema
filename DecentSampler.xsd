@@ -1040,7 +1040,7 @@ Do not use absolute paths - they break across OS platforms and users.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z0-9_][a-zA-Z0-9 #\-_./\\]*"></xs:pattern>
+            <xs:pattern value="[a-zA-Z0-9_][a-zA-Z0-9 #\-_./\\\(\)]*"></xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 
