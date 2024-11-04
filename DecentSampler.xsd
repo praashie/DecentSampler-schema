@@ -809,7 +809,7 @@ Attributes: `irFile`, `mix`
 &lt;h3&gt; `delay` &lt;/h3&gt;
 Attributes: `delayTime`, `feedback`, `stereoOffset`, `wetLevel`, `delayTimeFormat`
 
-&lt;h3&gt; Filters: `lowpass`, `lowpass_4pl`, `bandpass`, `hipass` &lt;/h3&gt;
+&lt;h3&gt; Filters: `lowpass`, `lowpass_4pl`, `bandpass`, `highpass` &lt;/h3&gt;
 Attributes: `frequency`, `resonance`
 
 &lt;h3&gt; `phaser` &lt;/h3&gt;
@@ -857,7 +857,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
             <xs:enumeration value="convolution" />
             <xs:enumeration value="delay" />
             <xs:enumeration value="gain" />
-            <xs:enumeration value="hipass" />
+            <xs:enumeration value="highpass" />
             <xs:enumeration value="lowpass" />
             <xs:enumeration value="lowpass_4pl" />
             <xs:enumeration value="phaser" />
@@ -874,7 +874,7 @@ Attributes: `damping`, `roomSize`, `wetLevel`
             <xs:enumeration value="bandpass" />
             <xs:enumeration value="chorus" />
             <xs:enumeration value="gain" />
-            <xs:enumeration value="hipass" />
+            <xs:enumeration value="highpass" />
             <xs:enumeration value="lowpass" />
             <xs:enumeration value="lowpass_4pl" />
             <xs:enumeration value="wave_folder" />
