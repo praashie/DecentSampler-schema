@@ -927,7 +927,7 @@ Beneath the `note` element, you can have any number of bindings.
             <xs:element name="binding" type="binding" maxOccurs="unbounded" />
         </xs:sequence>
 
-        <xs:attribute name="note" type="midi7Bit" use="required" />
+        <xs:attribute name="note" type="midi7BitRange" use="required" />
     </xs:complexType>
 
 <!--=================================-->
@@ -980,6 +980,14 @@ Default: `0`
         <xs:restriction base="xs:integer">
             <xs:minInclusive value="0" />
             <xs:maxInclusive value="127" />
+        </xs:restriction>
+    </xs:simpleType>
+
+<!--=================================-->
+
+    <xs:simpleType name="midi7BitRange">
+    <xs:restriction base="xs:string">
+        <xs:pattern value="(12[0-7]|1[0-1][0-9]|[0-9][0-9]|[0-9])(-(12[0-7]|1[0-1][0-9]|[0-9][0-9]|[0-9]))?"></xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 
