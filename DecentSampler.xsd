@@ -594,6 +594,15 @@ Specifies a positioned text label.
             </xs:documentation>
         </xs:annotation>
 
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this text label is visible.
+Default: `true`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="text" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>
@@ -1613,6 +1622,14 @@ Default: `12`
 
 <!-- Common attributes for UI controls -->
     <xs:attributeGroup name="controlProperties">
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this control is visible. 
+Default: `true`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute name="minValue" type="xs:decimal" default="0">
             <xs:annotation>
                 <xs:documentation>
