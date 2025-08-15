@@ -1250,10 +1250,19 @@ Default: `0`
     <xs:simpleType name="bindingParameterName">
         <xs:restriction base="xs:string">
 
-            <!-- instrument, amp -->
+            <!-- Controllable Parameters -->
+            <!-- amp, instrument -->
             <xs:enumeration value="AMP_VOLUME" />
             <xs:enumeration value="GLOBAL_TUNING" />
             <xs:enumeration value="PAN" />
+
+            <!-- general, instrument or group -->
+            <xs:enumeration value="SAMPLE_START" />
+            <xs:enumeration value="SAMPLE_END" />
+            <xs:enumeration value="LOOP_START" />
+            <xs:enumeration value="LOOP_END" />
+
+            <!-- amp, instrument -->
             <xs:enumeration value="AMP_VEL_TRACK" />
             <xs:enumeration value="ENV_ATTACK" />
             <xs:enumeration value="ENV_ATTACK_CURVE" />
@@ -1264,46 +1273,144 @@ Default: `0`
             <xs:enumeration value="ENV_RELEASE_CURVE" />
             <xs:enumeration value="GLIDE_TIME" />
 
-            <!-- instrument, effect -->
-            <xs:enumeration value="FX_CENTER_FREQUENCY" />
-            <xs:enumeration value="FX_DELAY_TIME" />
-            <xs:enumeration value="FX_DRIVE" />
-            <xs:enumeration value="FX_DRIVE_BOOST" />
-            <xs:enumeration value="FX_FEEDBACK" />
-            <xs:enumeration value="FX_FILTER_FREQUENCY" />
-            <xs:enumeration value="FX_FILTER_RESONANCE" />
-            <xs:enumeration value="FX_IR_FILE" />
-            <xs:enumeration value="FX_MIX" />
-            <xs:enumeration value="FX_MOD_DEPTH" />
-            <xs:enumeration value="FX_MOD_RATE" />
-            <xs:enumeration value="FX_OUTPUT_LEVEL" />
-            <xs:enumeration value="FX_REVERB_DAMPING" />
-            <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
-            <xs:enumeration value="FX_REVERB_WET_LEVEL" />
-            <xs:enumeration value="FX_STEREO_OFFSET" />
-            <xs:enumeration value="FX_THRESHOLD" />
-            <xs:enumeration value="FX_WET_LEVEL" />
-            <xs:enumeration value="LEVEL" />
-
-            <!-- group, amp -->
+            <!-- amp, group -->
             <xs:enumeration value="ENABLED" />
             <xs:enumeration value="AMP_VOLUME" />
             <xs:enumeration value="GROUP_TUNING" />
+            <xs:enumeration value="PAN" />
+            <xs:enumeration value="AMP_VEL_TRACK" />
+            <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_SUSTAIN" />
+            <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="OUTPUT_1_VOLUME" />
+            <xs:enumeration value="OUTPUT_2_VOLUME" />
+            <xs:enumeration value="OUTPUT_3_VOLUME" />
+            <xs:enumeration value="OUTPUT_4_VOLUME" />
+            <xs:enumeration value="OUTPUT_5_VOLUME" />
+            <xs:enumeration value="OUTPUT_6_VOLUME" />
+            <xs:enumeration value="OUTPUT_7_VOLUME" />
+            <xs:enumeration value="OUTPUT_8_VOLUME" />
+            <xs:enumeration value="OUTPUT_1_TARGET" />
+            <xs:enumeration value="OUTPUT_2_TARGET" />
+            <xs:enumeration value="OUTPUT_3_TARGET" />
+            <xs:enumeration value="OUTPUT_4_TARGET" />
+            <xs:enumeration value="OUTPUT_5_TARGET" />
+            <xs:enumeration value="OUTPUT_6_TARGET" />
+            <xs:enumeration value="OUTPUT_7_TARGET" />
+            <xs:enumeration value="OUTPUT_8_TARGET" />
+            <xs:enumeration value="GLIDE_TIME" />
 
-            <!-- tag, amp -->
+            <!-- amp, tag -->
             <xs:enumeration value="TAG_ENABLED" />
             <xs:enumeration value="TAG_VOLUME" />
 
-            <!-- ui, control -->
-            <xs:enumeration value="PATH" />
-            <xs:enumeration value="TEXT" />
-            <xs:enumeration value="VALUE" />
+            <!-- cc_binding, midi -->
+            <xs:enumeration value="ENABLED" />
+
+            <!-- note, midi -->
+            <xs:enumeration value="ENABLED" />
+
+            <!-- note_binding, midi -->
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="SEQ_INDEX" />
+            <xs:enumeration value="SEQ_LOOP_MODE" />
+            <xs:enumeration value="SEQ_TRANSPOSE_WITH_ROOT_NOTE" />
+            <xs:enumeration value="SEQ_PLAYBACK_RATE" />
+            <xs:enumeration value="SEQ_TRACK_MIDI_INPUT_VELOCITY" />
+            <xs:enumeration value="SEQ_TRANSPOSE" />
+
+            <!-- velocity_binding, midi -->
+            <xs:enumeration value="ENABLED" />
 
             <!-- modulator, instrument -->
             <xs:enumeration value="MOD_AMOUNT" />
             <xs:enumeration value="FREQUENCY" />
-            <xs:enumeration value="FREQUENCY" />
+            <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_ATTACK_CURVE" />
+            <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_DECAY_CURVE" />
+            <xs:enumeration value="ENV_SUSTAIN" />
+            <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="ENV_RELEASE_CURVE" />
+            <xs:enumeration value="RATE" />
+            <xs:enumeration value="ALL_NOTES_OFF" />
 
+            <!-- UI Parameters -->
+            <!-- general, ui -->
+            <xs:enumeration value="BG_IMAGE" />
+
+            <!-- button_state_binding, ui -->
+            <xs:enumeration value="ENABLED" />
+
+            <!-- control, ui -->
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="VISIBLE" />
+            <xs:enumeration value="VALUE" />
+            <xs:enumeration value="TEXT" />
+            <xs:enumeration value="MIN_VALUE" />
+            <xs:enumeration value="MAX_VALUE" />
+            <xs:enumeration value="VALUE_TYPE" />
+            <xs:enumeration value="PATH" />
+            <xs:enumeration value="OPACITY" />
+
+            <!-- keyboard_color, ui -->
+            <xs:enumeration value="ENABLED" />
+
+            <!-- control, ui -->
+            <xs:enumeration value="FRAME_RATE" />
+            <xs:enumeration value="CURRENT_FRAME" />
+            <xs:enumeration value="PLAYBACK_MODE" />
+            <xs:enumeration value="X_VALUE" />
+            <xs:enumeration value="Y_VALUE" />
+
+            <!-- Effects Parameters -->
+            <!-- effect, instrument -->
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="FX_MIX" />
+            <xs:enumeration value="FX_IR_FILE" />
+            <xs:enumeration value="FX_FILTER_FREQUENCY" />
+            <xs:enumeration value="FX_FILTER_Q" />
+            <xs:enumeration value="FX_FILTER_GAIN" />
+            <xs:enumeration value="FX_FILTER_RESONANCE" />
+            <xs:enumeration value="FX_REVERB_WET_LEVEL" />
+            <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
+            <xs:enumeration value="FX_REVERB_DAMPING" />
+            <xs:enumeration value="FX_MIX" />
+            <xs:enumeration value="FX_MOD_DEPTH" />
+            <xs:enumeration value="FX_MOD_RATE" />
+            <xs:enumeration value="FX_CENTER_FREQUENCY" />
+            <xs:enumeration value="FX_FEEDBACK" />
+            <xs:enumeration value="FX_DELAY_TIME" />
+            <xs:enumeration value="FX_DELAY_TIME_FORMAT" />
+            <xs:enumeration value="FX_STEREO_OFFSET" />
+            <xs:enumeration value="FX_WET_LEVEL" />
+            <xs:enumeration value="LEVEL" />
+            <xs:enumeration value="FX_PITCH_SHIFT" />
+            <xs:enumeration value="FX_DRIVE" />
+            <xs:enumeration value="FX_THRESHOLD" />
+            <xs:enumeration value="FX_DRIVE" />
+            <xs:enumeration value="FX_OUTPUT_LEVEL" />
+            <xs:enumeration value="FX_DRIVE_BOOST" />
+            <!-- Bus-related Parameters -->
+            <!-- amp, bus -->
+            <xs:enumeration value="BUS_VOLUME" />
+            <xs:enumeration value="OUTPUT_1_VOLUME" />
+            <xs:enumeration value="OUTPUT_2_VOLUME" />
+            <xs:enumeration value="OUTPUT_3_VOLUME" />
+            <xs:enumeration value="OUTPUT_4_VOLUME" />
+            <xs:enumeration value="OUTPUT_5_VOLUME" />
+            <xs:enumeration value="OUTPUT_6_VOLUME" />
+            <xs:enumeration value="OUTPUT_7_VOLUME" />
+            <xs:enumeration value="OUTPUT_8_VOLUME" />
+            <xs:enumeration value="OUTPUT_1_TARGET" />
+            <xs:enumeration value="OUTPUT_2_TARGET" />
+            <xs:enumeration value="OUTPUT_3_TARGET" />
+            <xs:enumeration value="OUTPUT_4_TARGET" />
+            <xs:enumeration value="OUTPUT_5_TARGET" />
+            <xs:enumeration value="OUTPUT_6_TARGET" />
+            <xs:enumeration value="OUTPUT_7_TARGET" />
+            <xs:enumeration value="OUTPUT_8_TARGET" />
 
         </xs:restriction>
     </xs:simpleType>
