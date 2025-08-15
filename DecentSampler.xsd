@@ -514,6 +514,13 @@ TODO: `"general"` is not mentioned as a valid value, but is present in multiple 
                     <xs:enumeration value="control" />
                     <xs:enumeration value="effect" />
                     <xs:enumeration value="general" />
+                    <xs:enumeration value="note" />
+                    <xs:enumeration value="note_binding" />
+                    <xs:enumeration value="velocity_binding" />
+                    <xs:enumeration value="button_state_binding" />
+                    <xs:enumeration value="keyboard_color" />
+                    <xs:enumeration value="modulator" />
+                    <xs:enumeration value="note_sequence" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -535,6 +542,7 @@ The level (or "scope") at which the binding affects a parameter.
                     <xs:enumeration value="instrument" />
                     <xs:enumeration value="group" />
                     <xs:enumeration value="tag" />
+                    <xs:enumeration value="midi" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -608,6 +616,8 @@ This allows you to set values for multiple groups at once by targeting a tag tha
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
+        <xs:attribute name="enabled" type="xs:boolean"/>
 
         <xs:attribute name="translation" default="linear">
             <xs:simpleType>
