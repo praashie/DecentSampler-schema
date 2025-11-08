@@ -206,7 +206,95 @@ A hex representation of the ARGB color to be used for this key range.
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="lfo" type="modulatorLFO" />
             <xs:element name="envelope" type="modulatorEnvelope" />
+            <xs:element name="mpeTimbre" type="modulatorMPETimbre" />
+            <xs:element name="mpePressure" type="modulatorMPEPressure" />
         </xs:choice>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorMPETimbre">
+        <xs:annotation>
+            <xs:documentation>
+The `mpeTimbre` element allows users to control the timbre of an instrument in response to MPE messages.
+NOTE: In order for this to work, the plugin must be in MPE mode.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="scope" default="voice">
+            <xs:annotation><xs:documentation>
+Whether or not this MPE timbre exists for all notes or whether each keypress gets its own MPE timbre.
+Possible values are `global` and `voice` (default for MPE timbre).
+If `voice` is chosen, a new MPE timbre is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="risingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE timbre to rise to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="fallingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE timbre to fall to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorMPEPressure">
+        <xs:annotation>
+            <xs:documentation>
+The `mpePressure` element allows users to control an instrument in response to MPE Pressure messages.
+NOTE: In order for this to work, the plugin must be in MPE mode.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="scope" default="voice">
+            <xs:annotation><xs:documentation>
+Whether or not this MPE pressure exists for all notes or whether each keypress gets its own MPE pressure.
+Possible values are `global` and `voice` (default for MPE pressure).
+If `voice` is chosen, a new MPE pressure is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="risingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE pressure to rise to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="fallingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE pressure to fall to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
 <!--=================================-->
@@ -365,6 +453,32 @@ Default value: `1.0`.
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="delayTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in seconds to wait before the LFO starts outputting signal.
+During this delay period, the LFO outputs zero.
+Default value: `0.0` (no delay).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modBehavior" default="set">
+            <xs:annotation><xs:documentation>
+This attribute controls how the LFO affects the parameter it is targeting.
+Possible values are `add`, `multiply`, and `set`.
+If `add` is chosen, the LFO will add its value to the parameter it is targeting.
+If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting.
+If `set` is chosen, the LFO will set the parameter it is targeting to its value.
+Default value: `set`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="add" />
+                    <xs:enumeration value="multiply" />
+                    <xs:enumeration value="set" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
         <xs:attribute name="scope" default="global">
             <xs:annotation><xs:documentation>
 Whether or not this LFO exists for all notes or whether each keypress gets its own LFO.
@@ -395,6 +509,48 @@ If `voice` is chosen, a new LFO is started each time a new note is pressed.
 This value between `0` and `1` controls how much the modulation affects the things it is targeting.
 In conventional terms, this is like the modulation depth.
 Default value: `1.0`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modBehavior" default="set">
+            <xs:annotation><xs:documentation>
+This attribute controls how the envelope affects the parameter it is targeting.
+Possible values are `add`, `multiply`, and `set`.
+If `add` is chosen, the envelope will add its value to the parameter it is targeting.
+If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting.
+If `set` is chosen, the envelope will set the parameter it is targeting to its value.
+Default value: `set`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="add" />
+                    <xs:enumeration value="multiply" />
+                    <xs:enumeration value="set" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="attackCurve" type="curveShape" default="-100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the attack portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `-100` (logarithmic).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="decayCurve" type="curveShape" default="100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `100` (exponential).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="releaseCurve" type="curveShape" default="100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the release portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `100` (exponential).
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
