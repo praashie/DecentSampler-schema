@@ -741,6 +741,54 @@ to always include a `parameterName`.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        
+        <xs:attribute name="textColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the menu text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="backgroundColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the menu background.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="highlightedTextColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the highlighted (selected) menu text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="highlightedBackgroundColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the highlighted (selected) menu background.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="vAlign" type="alignVertical">
+            <xs:annotation>
+                <xs:documentation>
+The vertical alignment of the menu text. Valid values are "top", "center", "bottom".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="hAlign" type="alignHorizontal">
+            <xs:annotation>
+                <xs:documentation>
+The horizontal alignment of the menu text. Valid values are "left", "center", "right".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
@@ -1810,6 +1858,10 @@ Default: `0`
             <xs:enumeration value="VISIBLE" />
             <xs:enumeration value="VALUE" />
             <xs:enumeration value="TEXT" />
+            <xs:enumeration value="TEXT_COLOR" />
+            <xs:enumeration value="BACKGROUND_COLOR" />
+            <xs:enumeration value="HIGHLIGHTED_TEXT_COLOR" />
+            <xs:enumeration value="HIGHLIGHTED_BACKGROUND_COLOR" />
             <xs:enumeration value="MIN_VALUE" />
             <xs:enumeration value="MAX_VALUE" />
             <xs:enumeration value="VALUE_TYPE" />
