@@ -1999,6 +1999,73 @@ Default: `legato`
             </xs:simpleType>
         </xs:attribute>
 
+        <xs:attribute name="delay" type="xs:decimal" default="0">
+            <xs:annotation><xs:documentation>
+The delay time before the sample is triggered.
+This specifies the amount of delay, with the unit determined by the `delayUnit` attribute.
+Can be an integer or float value.
+Default: `0`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="delayUnit" default="seconds">
+            <xs:annotation><xs:documentation>
+The unit for the delay time specified in the `delay` attribute.
+Possible values are:
+
+`seconds` (delay in seconds),
+`beats` (delay in musical beats), and
+`samples` (delay in audio samples).
+
+Default: `seconds`
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="seconds" />
+                    <xs:enumeration value="beats" />
+                    <xs:enumeration value="samples" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerEnabled" type="xs:boolean" default="false">
+            <xs:annotation><xs:documentation>
+Enables pattern retriggering for creating repeating sample sequences.
+When enabled, after the initial delay sequence completes, all samples in the group will retrigger according to the retriggerInterval.
+This allows creating looping drum patterns and rhythmic sequences from delayed samples.
+Default: `false`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerInterval" type="xs:decimal" default="4.0">
+            <xs:annotation><xs:documentation>
+The time interval between pattern repetitions when retriggerEnabled is true.
+This determines how long to wait before retriggering the entire delay sequence.
+The unit is specified by the retriggerIntervalUnit attribute.
+Default: `4.0`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerIntervalUnit" default="beats">
+            <xs:annotation><xs:documentation>
+The unit for the retrigger interval specified in the retriggerInterval attribute.
+Possible values are:
+
+`seconds` (interval in seconds),
+`beats` (interval in musical beats - stays synchronized with host tempo), and
+`samples` (interval in audio samples).
+
+Default: `beats`
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="seconds" />
+                    <xs:enumeration value="beats" />
+                    <xs:enumeration value="samples" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
         <xs:attribute name="loNote" type="noteNameOrNumber" default="0">
             <xs:annotation>
                 <xs:documentation>
