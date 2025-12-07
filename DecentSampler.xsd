@@ -149,6 +149,8 @@ As such, every UI must have at most one `tab` element.
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeledKnob" type="labeledKnob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="rectangle" type="rectangle" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="line" type="line" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
 
         <xs:attribute name="name">
@@ -1281,6 +1283,169 @@ A tool tip to display when the user hovers over this image.
 
 <!--=================================-->
 
+    <xs:complexType name="rectangle">
+        <xs:annotation>
+            <xs:documentation>
+The `&lt;rectangle&gt;` element allows you to draw colored rectangles in your UI.
+Rectangles can be used for backgrounds, panels, dividers, or decorative elements.
+All attributes support bindings for dynamic control.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="fillColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the rectangle fill.
+Format: `#AARRGGBB` where AA is alpha (transparency), RR is red, GG is green, BB is blue.
+Example: `#FF0000FF` is fully opaque blue.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="borderColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the rectangle border.
+Format: `#AARRGGBB`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="borderThickness" type="xs:decimal" default="0">
+            <xs:annotation>
+                <xs:documentation>
+The thickness of the rectangle border in pixels.
+Default: `0` (no border).
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this rectangle is visible. Valid values: `true` (default), `false`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A comma-separated list of tags to be associated with this rectangle.
+These can be used in conjunction with any binding that takes a `controlIndex`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A tool tip to display when the user hovers over this rectangle.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="line">
+        <xs:annotation>
+            <xs:documentation>
+The `&lt;line&gt;` element allows you to draw lines in your UI.
+Lines are defined by their start point (x1, y1) and end point (x2, y2).
+All endpoint attributes support bindings for dynamic control.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="x1" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The x coordinate of the line's start point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="y1" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The y coordinate of the line's start point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="x2" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The x coordinate of the line's end point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="y2" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The y coordinate of the line's end point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="lineColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the line.
+Format: `#AARRGGBB` where AA is alpha (transparency), RR is red, GG is green, BB is blue.
+Example: `#FF000000` is fully opaque black.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="lineThickness" type="xs:decimal" default="1">
+            <xs:annotation>
+                <xs:documentation>
+The thickness of the line in pixels.
+Default: `1`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this line is visible. Valid values: `true` (default), `false`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A comma-separated list of tags to be associated with this line.
+These can be used in conjunction with any binding that takes a `controlIndex`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A tool tip to display when the user hovers over this line.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
     <xs:complexType name="groups">
         <xs:annotation>
             <xs:documentation>
@@ -1303,6 +1468,7 @@ The first group in a file is group `0`, the second is group `1`, etc.
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element name="sample" type="sample" minOccurs="0" maxOccurs="unbounded" />
+                        <xs:element name="oscillator" type="oscillator" minOccurs="0" maxOccurs="unbounded" />
                         <xs:element name="effects" type="groupEffects" minOccurs="0" maxOccurs="1"/>
                     </xs:choice>
                     <xs:attribute name="name">
@@ -1320,6 +1486,27 @@ For example, `1.0` would be a half-step up and `-1` would a half-step down.
 Default: `0`
                             </xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="waveform">
+                        <xs:annotation>
+                            <xs:documentation>
+The waveform type to use for any oscillators in this group.
+This can be set at the group level or overridden at the oscillator level.
+Options: `sine`, `saw`, `square`, `triangle`, `noise`, `white_noise`
+Note: Both `noise` and `white_noise` refer to the same white noise generator.
+Default: `sine`
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="sine"/>
+                                <xs:enumeration value="saw"/>
+                                <xs:enumeration value="square"/>
+                                <xs:enumeration value="triangle"/>
+                                <xs:enumeration value="noise"/>
+                                <xs:enumeration value="white_noise"/>
+                            </xs:restriction>
+                        </xs:simpleType>
                     </xs:attribute>
                     <xs:attribute name="enabled" type="xs:boolean">
                         <xs:annotation><xs:documentation>
@@ -1597,6 +1784,52 @@ Default: `0`
 
 <!--=================================-->
 
+    <xs:complexType name="oscillator">
+        <xs:annotation>
+            <xs:documentation>
+Oscillators generate audio waveforms that can be used alongside or instead of samples.
+They support the same note triggering, velocity response, ADSR envelopes, and property inheritance as samples.
+Oscillators are useful for creating synthetic layers, sub-bass, or completely synthesized instruments.
+            </xs:documentation>
+        </xs:annotation>
+        
+        <xs:attribute name="waveform" default="sine">
+            <xs:annotation>
+                <xs:documentation>
+The waveform type for the oscillator.
+Options: `sine`, `saw`, `square`, `triangle`, `noise`, `white_noise`
+Note: Both `noise` and `white_noise` refer to the same white noise generator.
+Default: `sine`
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="sine"/>
+                    <xs:enumeration value="saw"/>
+                    <xs:enumeration value="square"/>
+                    <xs:enumeration value="triangle"/>
+                    <xs:enumeration value="noise"/>
+                    <xs:enumeration value="white_noise"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="tuning" type="xs:decimal" default="0">
+            <xs:annotation>
+                <xs:documentation>
+A fine-tuning offset (in semitones) from the played MIDI note.
+The oscillator will track the keyboard but can be transposed using this parameter.
+Example: `12` would play an octave up, `-12` an octave down, `7` a perfect fifth up.
+Default: `0`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="regionSettings" />
+    </xs:complexType>
+
+<!--=================================-->
+
     <xs:simpleType name="midi7Bit">
         <xs:restriction base="xs:integer">
             <xs:minInclusive value="0" />
@@ -1823,6 +2056,7 @@ Default: `0`
             <xs:enumeration value="AMP_VOLUME" />
             <xs:enumeration value="GROUP_TUNING" />
             <xs:enumeration value="PAN" />
+            <xs:enumeration value="OSCILLATOR_WAVEFORM" />
             <xs:enumeration value="AMP_VEL_TRACK" />
             <xs:enumeration value="ENV_ATTACK" />
             <xs:enumeration value="ENV_DECAY" />
@@ -1858,6 +2092,10 @@ Default: `0`
             <xs:enumeration value="VISIBLE" />
             <xs:enumeration value="VALUE" />
             <xs:enumeration value="TEXT" />
+            <xs:enumeration value="X" />
+            <xs:enumeration value="Y" />
+            <xs:enumeration value="WIDTH" />
+            <xs:enumeration value="HEIGHT" />
             <xs:enumeration value="TEXT_COLOR" />
             <xs:enumeration value="BACKGROUND_COLOR" />
             <xs:enumeration value="HIGHLIGHTED_TEXT_COLOR" />
@@ -1872,6 +2110,10 @@ Default: `0`
             <xs:enumeration value="PLAYBACK_MODE" />
             <xs:enumeration value="X_VALUE" />
             <xs:enumeration value="Y_VALUE" />
+            <xs:enumeration value="X1" />
+            <xs:enumeration value="Y1" />
+            <xs:enumeration value="X2" />
+            <xs:enumeration value="Y2" />
 
             <!-- ui, keyboard_color -->
             <xs:enumeration value="ENABLED" />
