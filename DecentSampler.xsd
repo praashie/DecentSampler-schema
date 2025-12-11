@@ -144,10 +144,13 @@ As such, every UI must have at most one `tab` element.
             <xs:element name="button" type="button" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="control" type="control" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="image" type="image" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="multiFrameImage" type="multiFrameImage" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="menu" type="menu" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeled-knob" type="labeled-knob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="labeledKnob" type="labeledKnob" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="label" type="label" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="rectangle" type="rectangle" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="line" type="line" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
 
         <xs:attribute name="name">
@@ -205,7 +208,214 @@ A hex representation of the ARGB color to be used for this key range.
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="lfo" type="modulatorLFO" />
             <xs:element name="envelope" type="modulatorEnvelope" />
+            <xs:element name="mpeTimbre" type="modulatorMPETimbre" />
+            <xs:element name="mpePressure" type="modulatorMPEPressure" />
         </xs:choice>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorMPETimbre">
+        <xs:annotation>
+            <xs:documentation>
+The `mpeTimbre` element allows users to control the timbre of an instrument in response to MPE messages.
+NOTE: In order for this to work, the plugin must be in MPE mode.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="scope" default="voice">
+            <xs:annotation><xs:documentation>
+Whether or not this MPE timbre exists for all notes or whether each keypress gets its own MPE timbre.
+Possible values are `global` and `voice` (default for MPE timbre).
+If `voice` is chosen, a new MPE timbre is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="risingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE timbre to rise to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="fallingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE timbre to fall to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorMPEPressure">
+        <xs:annotation>
+            <xs:documentation>
+The `mpePressure` element allows users to control an instrument in response to MPE Pressure messages.
+NOTE: In order for this to work, the plugin must be in MPE mode.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="scope" default="voice">
+            <xs:annotation><xs:documentation>
+Whether or not this MPE pressure exists for all notes or whether each keypress gets its own MPE pressure.
+Possible values are `global` and `voice` (default for MPE pressure).
+If `voice` is chosen, a new MPE pressure is started each time a new note is pressed.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="risingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE pressure to rise to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="fallingSmoothingTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in milliseconds it takes for the MPE pressure to fall to its target value.
+Default value: 0 milliseconds.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="noteSequences">
+        <xs:annotation>
+            <xs:documentation>
+The `noteSequences` element is how you specify note sequences that can be used by the built-in note sequencer.
+There should be exactly one `noteSequences` element in each `DecentSampler` file.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="sequence">
+                <xs:annotation>
+                    <xs:documentation>
+A sequence element defines a note sequence that can be triggered by keys or UI controls.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="note">
+                            <xs:annotation>
+                                <xs:documentation>
+A note element within a sequence.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:attribute name="position" type="xs:decimal" use="required">
+                                    <xs:annotation>
+                                        <xs:documentation>
+The position of the note in the sequence, in beats. This is a floating point number.
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                                <xs:attribute name="velocity" type="decimalMultiplier" use="required">
+                                    <xs:annotation>
+                                        <xs:documentation>
+The velocity of the note. This is a floating point number between 0 and 1.
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                                <xs:attribute name="note" type="midi7Bit" use="required">
+                                    <xs:annotation>
+                                        <xs:documentation>
+The MIDI note number of the note.
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                                <xs:attribute name="length" type="xs:decimal" use="required">
+                                    <xs:annotation>
+                                        <xs:documentation>
+The length of the note in beats. This is a floating point number.
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+
+                    <xs:attribute name="name" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>
+An optional descriptive name for the sequence. This is only used in the sample editor UI to help you identify the sequence.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="length" type="xs:decimal" use="required">
+                        <xs:annotation>
+                            <xs:documentation>
+The length of the sequence in beats. This is a floating point number.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="rate" type="decimalPositive" default="1.0">
+                        <xs:annotation>
+                            <xs:documentation>
+The rate at which the sequence is played. This is a floating point number. The default is 1.0.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="buses">
+        <xs:annotation>
+            <xs:documentation>
+The `buses` element allows you to specify up to 16 audio buses for creating complex mixes and routing audio to various outputs.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="16">
+            <xs:element name="bus">
+                <xs:annotation>
+                    <xs:documentation>
+A bus element defines an audio bus that samples can be routed to.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence minOccurs="0" maxOccurs="1">
+                        <xs:element name="effects" type="groupEffects" />
+                    </xs:sequence>
+
+                    <xs:attribute name="busVolume" type="decimalMultiplier" default="1.0">
+                        <xs:annotation>
+                            <xs:documentation>
+The volume of the bus. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+
+                    <xs:attributeGroup ref="busOutputAttributes" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
     </xs:complexType>
 
 <!--=================================-->
@@ -245,6 +455,32 @@ Default value: `1.0`.
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="delayTime" type="decimalPositive" default="0.0">
+            <xs:annotation><xs:documentation>
+The time in seconds to wait before the LFO starts outputting signal.
+During this delay period, the LFO outputs zero.
+Default value: `0.0` (no delay).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modBehavior" default="set">
+            <xs:annotation><xs:documentation>
+This attribute controls how the LFO affects the parameter it is targeting.
+Possible values are `add`, `multiply`, and `set`.
+If `add` is chosen, the LFO will add its value to the parameter it is targeting.
+If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting.
+If `set` is chosen, the LFO will set the parameter it is targeting to its value.
+Default value: `set`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="add" />
+                    <xs:enumeration value="multiply" />
+                    <xs:enumeration value="set" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
         <xs:attribute name="scope" default="global">
             <xs:annotation><xs:documentation>
 Whether or not this LFO exists for all notes or whether each keypress gets its own LFO.
@@ -275,6 +511,48 @@ If `voice` is chosen, a new LFO is started each time a new note is pressed.
 This value between `0` and `1` controls how much the modulation affects the things it is targeting.
 In conventional terms, this is like the modulation depth.
 Default value: `1.0`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modBehavior" default="set">
+            <xs:annotation><xs:documentation>
+This attribute controls how the envelope affects the parameter it is targeting.
+Possible values are `add`, `multiply`, and `set`.
+If `add` is chosen, the envelope will add its value to the parameter it is targeting.
+If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting.
+If `set` is chosen, the envelope will set the parameter it is targeting to its value.
+Default value: `set`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="add" />
+                    <xs:enumeration value="multiply" />
+                    <xs:enumeration value="set" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="attackCurve" type="curveShape" default="-100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the attack portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `-100` (logarithmic).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="decayCurve" type="curveShape" default="100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the decay portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `100` (exponential).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="releaseCurve" type="curveShape" default="100">
+            <xs:annotation><xs:documentation>
+A numeric value from -100 to 100 that determines the shape of the release portion of the ADSR envelope.
+Common values are `-100` (logarithmic), `0` (linear), and `100` (exponential).
+Default value: `100` (exponential).
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
@@ -365,6 +643,37 @@ A value of 0 means that the first state is active.
 
         <xs:attributeGroup ref="buttonImageAttributes" />
         <xs:attributeGroup ref="widgetGeometry" />
+
+        <xs:attribute name="disabledOpacity" type="decimalMultiplier" default="0.5">
+            <xs:annotation><xs:documentation>
+The opacity of the button when it is disabled. This is a floating point value between 0 and 1. Default: 0.5.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this button is visible. There are two valid values: `true`, `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="enabled" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this button is enabled. There are two valid values: `true`, `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation><xs:documentation>
+A comma-separated list of tags to be associated with this button.
+These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation><xs:documentation>
+A tool tip to display when the user hovers over this control.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
 <!--=================================-->
@@ -434,6 +743,54 @@ to always include a `parameterName`.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        
+        <xs:attribute name="textColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the menu text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="backgroundColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the menu background.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="highlightedTextColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the highlighted (selected) menu text.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="highlightedBackgroundColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the highlighted (selected) menu background.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="vAlign" type="alignVertical">
+            <xs:annotation>
+                <xs:documentation>
+The vertical alignment of the menu text. Valid values are "top", "center", "bottom".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="hAlign" type="alignHorizontal">
+            <xs:annotation>
+                <xs:documentation>
+The horizontal alignment of the menu text. Valid values are "left", "center", "right".
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
@@ -482,6 +839,14 @@ TODO: `"general"` is not mentioned as a valid value, but is present in multiple 
                     <xs:enumeration value="control" />
                     <xs:enumeration value="effect" />
                     <xs:enumeration value="general" />
+                    <xs:enumeration value="note" />
+                    <xs:enumeration value="note_binding" />
+                    <xs:enumeration value="velocity_binding" />
+                    <xs:enumeration value="button_state_binding" />
+                    <xs:enumeration value="keyboard_color" />
+                    <xs:enumeration value="modulator" />
+                    <xs:enumeration value="note_sequence" />
+                    <xs:enumeration value="cc_binding" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -501,6 +866,7 @@ The level (or "scope") at which the binding affects a parameter.
                     <xs:enumeration value="instrument" />
                     <xs:enumeration value="group" />
                     <xs:enumeration value="tag" />
+                    <xs:enumeration value="midi" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -583,6 +949,117 @@ Valid values are `true` and `false`. This is only looked at if translation is se
 The parameter value to use when using `translation="fixed_value"`.
             </xs:documentation></xs:annotation>
         </xs:attribute>
+
+        <!-- Note sequence binding attributes -->
+        <xs:attribute name="seqIndex" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+A 0-based index of a sequence underneath the `noteSequences` section.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqFollowGlobalTempo" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+Whether or not the sequence should follow the global tempo. Valid values are `true` and `false`.
+If this is set to false, then playback will be hardcoded at 120BPM.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqTriggerBehavior" default="midi_key">
+            <xs:annotation><xs:documentation>
+What the binding should do with the sequence in question. Valid values are `on` (start playing the sequence),
+`off` (stop playing the sequence), `midi_key` (special value that will cause the binding to follow a specific MIDI key note binding).
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="on" />
+                    <xs:enumeration value="off" />
+                    <xs:enumeration value="midi_key" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        
+        <xs:attribute name="seqPlayerIdentifier" type="xs:string">
+            <xs:annotation><xs:documentation>
+An identifier used for tracking the state of a sequence. This value can be any sequence of numbers or letters.
+Required when `seqTriggerBehavior` is `on` or `off`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqTrackMidiInputVelocity" type="decimalMultiplier">
+            <xs:annotation><xs:documentation>
+Whether or not the sequence should respect the velocity of the incoming MIDI note.
+This can only be used when the sequence is being triggered by a MIDI note binding.
+Value should be a floating point number from 0.0 to 1.0.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqTranspose" type="xs:decimal">
+            <xs:annotation><xs:documentation>
+Transpose the notes in the sequence by an arbitrary number of half steps.
+Value should be a floating point number from -36 to 36.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqTransposeWithRootNote" type="midi7Bit">
+            <xs:annotation><xs:documentation>
+Transpose the notes in the sequence relative to the pitch of the incoming MIDI note.
+This can only be used when the sequence is being triggered by a MIDI note binding.
+Value should be a floating point number from 0 to 127.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqPlaybackRate" type="decimalPositive" default="1.0">
+            <xs:annotation><xs:documentation>
+The speed of playback. Value should be a floating point number from 0.001 to 10000.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="seqLoopMode" default="forward">
+            <xs:annotation><xs:documentation>
+Valid values are: `forward`, `reverse`, `random`, `random_no_repeat`, `no_loop`.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="forward" />
+                    <xs:enumeration value="reverse" />
+                    <xs:enumeration value="random" />
+                    <xs:enumeration value="random_no_repeat" />
+                    <xs:enumeration value="no_loop" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <!-- MIDI binding attributes -->
+        <xs:attribute name="midiElementIndex" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The 0-based index of the MIDI element within the `midi` element.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+        
+        <xs:attribute name="bindingIndex" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The index of the binding being referenced.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <!-- UI binding attributes -->
+        <xs:attribute name="stateIndex" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The 0-based index of the state in question (for button state bindings).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="colorIndex" type="xs:nonNegativeInteger">
+            <xs:annotation><xs:documentation>
+The 0-based index of the color element within the keyboard element.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="enabled" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+A value that turns the binding on and off. Valid values are: `true`, `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
 <!--=================================-->
@@ -623,6 +1100,42 @@ Default: `center`
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="orientation" default="horizontal">
+            <xs:annotation>
+                <xs:documentation>
+The orientation of the text within the box described by the width and height attributes.
+Valid values: `horizontal`, `vertical_up`, `vertical_down`.
+Default is `horizontal`.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="horizontal" />
+                    <xs:enumeration value="vertical_up" />
+                    <xs:enumeration value="vertical_down" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation><xs:documentation>
+A comma-separated list of tags to be associated with this label.
+These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this text label is visible. There are two valid values: `true` (default), `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation><xs:documentation>
+A tool tip to display when the user hovers over this label.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attributeGroup ref="textProperties" />
         <xs:attributeGroup ref="widgetGeometry" />
     </xs:complexType>
@@ -655,7 +1168,280 @@ Default value is `preserve`.
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
+
+        <xs:attribute name="opacity" type="decimalMultiplier" default="1.0">
+            <xs:annotation><xs:documentation>
+The opacity of the image. This is a floating point value between 0 and 1. Default: 1.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation><xs:documentation>
+A tool tip to display when the user hovers over this image.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="multiFrameImage">
+        <xs:annotation><xs:documentation>
+The `multiFrameImage` element allows you to play a sequence of images as an animation.
+The expectation is that all the frames of the animation will be loaded in a single image,
+arranged in a strip – either horizontal or vertical.
+        </xs:documentation></xs:annotation>
+
+        <xs:attribute name="path" type="relativeFilePath" use="required">
+            <xs:annotation><xs:documentation>
+The relative path of the image file to show in this component.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="numFrames" type="xs:positiveInteger" use="required">
+            <xs:annotation><xs:documentation>
+The number of frames in the animation.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="frameRate" type="xs:decimal" use="required">
+            <xs:annotation><xs:documentation>
+The frame rate of the animation in frames per second. The maximum supported frame rate is 24 frames per second.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="opacity" type="decimalMultiplier" default="1.0">
+            <xs:annotation><xs:documentation>
+The opacity of the animation. This is a floating point value between 0 and 1. Default: 1.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="sourceFormat" use="required">
+            <xs:annotation><xs:documentation>
+The orientation of the frames within the image strip.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="horizontal_image_strip">
+                        <xs:annotation>
+                            <xs:documentation>Frames are arranged horizontally in the image.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="vertical_image_strip">
+                        <xs:annotation>
+                            <xs:documentation>Frames are arranged vertically in the image.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="playbackMode" default="forward_loop">
+            <xs:annotation><xs:documentation>
+The direction in which the animation should play.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="forward_loop" />
+                    <xs:enumeration value="forward_once" />
+                    <xs:enumeration value="reverse_loop" />
+                    <xs:enumeration value="reverse_once" />
+                    <xs:enumeration value="ping_pong_loop" />
+                    <xs:enumeration value="stopped" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this image is visible. There are two valid values: `true` (default), `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation><xs:documentation>
+A comma-separated list of tags to be associated with this image.
+These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation><xs:documentation>
+A tool tip to display when the user hovers over this image.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="rectangle">
+        <xs:annotation>
+            <xs:documentation>
+The `&lt;rectangle&gt;` element allows you to draw colored rectangles in your UI.
+Rectangles can be used for backgrounds, panels, dividers, or decorative elements.
+All attributes support bindings for dynamic control.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="fillColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the rectangle fill.
+Format: `#AARRGGBB` where AA is alpha (transparency), RR is red, GG is green, BB is blue.
+Example: `#FF0000FF` is fully opaque blue.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="borderColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the rectangle border.
+Format: `#AARRGGBB`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="borderThickness" type="xs:decimal" default="0">
+            <xs:annotation>
+                <xs:documentation>
+The thickness of the rectangle border in pixels.
+Default: `0` (no border).
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this rectangle is visible. Valid values: `true` (default), `false`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A comma-separated list of tags to be associated with this rectangle.
+These can be used in conjunction with any binding that takes a `controlIndex`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A tool tip to display when the user hovers over this rectangle.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="widgetGeometry" />
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="line">
+        <xs:annotation>
+            <xs:documentation>
+The `&lt;line&gt;` element allows you to draw lines in your UI.
+Lines are defined by their start point (x1, y1) and end point (x2, y2).
+All endpoint attributes support bindings for dynamic control.
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="x1" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The x coordinate of the line's start point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="y1" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The y coordinate of the line's start point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="x2" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The x coordinate of the line's end point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="y2" type="xs:integer" use="required">
+            <xs:annotation>
+                <xs:documentation>
+The y coordinate of the line's end point, in pixels, where (0,0) is the top-left corner.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="lineColor" type="hexARGB">
+            <xs:annotation>
+                <xs:documentation>
+A hex representation of the ARGB color to be used for the line.
+Format: `#AARRGGBB` where AA is alpha (transparency), RR is red, GG is green, BB is blue.
+Example: `#FF000000` is fully opaque black.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="lineThickness" type="xs:decimal" default="1">
+            <xs:annotation>
+                <xs:documentation>
+The thickness of the line in pixels.
+Default: `1`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation>
+                <xs:documentation>
+This controls whether or not this line is visible. Valid values: `true` (default), `false`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A comma-separated list of tags to be associated with this line.
+These can be used in conjunction with any binding that takes a `controlIndex`.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+A tool tip to display when the user hovers over this line.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
 <!--=================================-->
@@ -682,6 +1468,7 @@ The first group in a file is group `0`, the second is group `1`, etc.
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:element name="sample" type="sample" minOccurs="0" maxOccurs="unbounded" />
+                        <xs:element name="oscillator" type="oscillator" minOccurs="0" maxOccurs="unbounded" />
                         <xs:element name="effects" type="groupEffects" minOccurs="0" maxOccurs="1"/>
                     </xs:choice>
                     <xs:attribute name="name">
@@ -699,6 +1486,27 @@ For example, `1.0` would be a half-step up and `-1` would a half-step down.
 Default: `0`
                             </xs:documentation>
                         </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="waveform">
+                        <xs:annotation>
+                            <xs:documentation>
+The waveform type to use for any oscillators in this group.
+This can be set at the group level or overridden at the oscillator level.
+Options: `sine`, `saw`, `square`, `triangle`, `noise`, `white_noise`
+Note: Both `noise` and `white_noise` refer to the same white noise generator.
+Default: `sine`
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="sine"/>
+                                <xs:enumeration value="saw"/>
+                                <xs:enumeration value="square"/>
+                                <xs:enumeration value="triangle"/>
+                                <xs:enumeration value="noise"/>
+                                <xs:enumeration value="white_noise"/>
+                            </xs:restriction>
+                        </xs:simpleType>
                     </xs:attribute>
                     <xs:attribute name="enabled" type="xs:boolean">
                         <xs:annotation><xs:documentation>
@@ -976,6 +1784,52 @@ Default: `0`
 
 <!--=================================-->
 
+    <xs:complexType name="oscillator">
+        <xs:annotation>
+            <xs:documentation>
+Oscillators generate audio waveforms that can be used alongside or instead of samples.
+They support the same note triggering, velocity response, ADSR envelopes, and property inheritance as samples.
+Oscillators are useful for creating synthetic layers, sub-bass, or completely synthesized instruments.
+            </xs:documentation>
+        </xs:annotation>
+        
+        <xs:attribute name="waveform" default="sine">
+            <xs:annotation>
+                <xs:documentation>
+The waveform type for the oscillator.
+Options: `sine`, `saw`, `square`, `triangle`, `noise`, `white_noise`
+Note: Both `noise` and `white_noise` refer to the same white noise generator.
+Default: `sine`
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="sine"/>
+                    <xs:enumeration value="saw"/>
+                    <xs:enumeration value="square"/>
+                    <xs:enumeration value="triangle"/>
+                    <xs:enumeration value="noise"/>
+                    <xs:enumeration value="white_noise"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="tuning" type="xs:decimal" default="0">
+            <xs:annotation>
+                <xs:documentation>
+A fine-tuning offset (in semitones) from the played MIDI note.
+The oscillator will track the keyboard but can be transposed using this parameter.
+Example: `12` would play an octave up, `-12` an octave down, `7` a perfect fifth up.
+Default: `0`
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attributeGroup ref="regionSettings" />
+    </xs:complexType>
+
+<!--=================================-->
+
     <xs:simpleType name="midi7Bit">
         <xs:restriction base="xs:integer">
             <xs:minInclusive value="0" />
@@ -1165,19 +2019,30 @@ Default: `0`
             <xs:enumeration value="ENV_RELEASE_CURVE" />
             <xs:enumeration value="GLIDE_TIME" />
 
+            <!-- instrument, general -->
+            <xs:enumeration value="SAMPLE_START" />
+            <xs:enumeration value="SAMPLE_END" />
+            <xs:enumeration value="LOOP_START" />
+            <xs:enumeration value="LOOP_END" />
+            <xs:enumeration value="ALL_NOTES_OFF" />
+
             <!-- instrument, effect -->
             <xs:enumeration value="FX_CENTER_FREQUENCY" />
             <xs:enumeration value="FX_DELAY_TIME" />
+            <xs:enumeration value="FX_DELAY_TIME_FORMAT" />
             <xs:enumeration value="FX_DRIVE" />
             <xs:enumeration value="FX_DRIVE_BOOST" />
             <xs:enumeration value="FX_FEEDBACK" />
             <xs:enumeration value="FX_FILTER_FREQUENCY" />
             <xs:enumeration value="FX_FILTER_RESONANCE" />
+            <xs:enumeration value="FX_FILTER_Q" />
+            <xs:enumeration value="FX_FILTER_GAIN" />
             <xs:enumeration value="FX_IR_FILE" />
             <xs:enumeration value="FX_MIX" />
             <xs:enumeration value="FX_MOD_DEPTH" />
             <xs:enumeration value="FX_MOD_RATE" />
             <xs:enumeration value="FX_OUTPUT_LEVEL" />
+            <xs:enumeration value="FX_PITCH_SHIFT" />
             <xs:enumeration value="FX_REVERB_DAMPING" />
             <xs:enumeration value="FX_REVERB_ROOM_SIZE" />
             <xs:enumeration value="FX_REVERB_WET_LEVEL" />
@@ -1190,22 +2055,148 @@ Default: `0`
             <xs:enumeration value="ENABLED" />
             <xs:enumeration value="AMP_VOLUME" />
             <xs:enumeration value="GROUP_TUNING" />
+            <xs:enumeration value="PAN" />
+            <xs:enumeration value="OSCILLATOR_WAVEFORM" />
+            <xs:enumeration value="AMP_VEL_TRACK" />
+            <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_SUSTAIN" />
+            <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="GLIDE_TIME" />
+            <xs:enumeration value="OUTPUT_1_VOLUME" />
+            <xs:enumeration value="OUTPUT_2_VOLUME" />
+            <xs:enumeration value="OUTPUT_3_VOLUME" />
+            <xs:enumeration value="OUTPUT_4_VOLUME" />
+            <xs:enumeration value="OUTPUT_5_VOLUME" />
+            <xs:enumeration value="OUTPUT_6_VOLUME" />
+            <xs:enumeration value="OUTPUT_7_VOLUME" />
+            <xs:enumeration value="OUTPUT_8_VOLUME" />
+            <xs:enumeration value="OUTPUT_1_TARGET" />
+            <xs:enumeration value="OUTPUT_2_TARGET" />
+            <xs:enumeration value="OUTPUT_3_TARGET" />
+            <xs:enumeration value="OUTPUT_4_TARGET" />
+            <xs:enumeration value="OUTPUT_5_TARGET" />
+            <xs:enumeration value="OUTPUT_6_TARGET" />
+            <xs:enumeration value="OUTPUT_7_TARGET" />
+            <xs:enumeration value="OUTPUT_8_TARGET" />
 
             <!-- tag, amp -->
             <xs:enumeration value="TAG_ENABLED" />
             <xs:enumeration value="TAG_VOLUME" />
 
+            <!-- ui, general -->
+            <xs:enumeration value="BG_IMAGE" />
+
             <!-- ui, control -->
-            <xs:enumeration value="PATH" />
-            <xs:enumeration value="TEXT" />
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="VISIBLE" />
             <xs:enumeration value="VALUE" />
+            <xs:enumeration value="TEXT" />
+            <xs:enumeration value="X" />
+            <xs:enumeration value="Y" />
+            <xs:enumeration value="WIDTH" />
+            <xs:enumeration value="HEIGHT" />
+            <xs:enumeration value="TEXT_COLOR" />
+            <xs:enumeration value="BACKGROUND_COLOR" />
+            <xs:enumeration value="HIGHLIGHTED_TEXT_COLOR" />
+            <xs:enumeration value="HIGHLIGHTED_BACKGROUND_COLOR" />
+            <xs:enumeration value="MIN_VALUE" />
+            <xs:enumeration value="MAX_VALUE" />
+            <xs:enumeration value="VALUE_TYPE" />
+            <xs:enumeration value="PATH" />
+            <xs:enumeration value="OPACITY" />
+            <xs:enumeration value="FRAME_RATE" />
+            <xs:enumeration value="CURRENT_FRAME" />
+            <xs:enumeration value="PLAYBACK_MODE" />
+            <xs:enumeration value="X_VALUE" />
+            <xs:enumeration value="Y_VALUE" />
+            <xs:enumeration value="X1" />
+            <xs:enumeration value="Y1" />
+            <xs:enumeration value="X2" />
+            <xs:enumeration value="Y2" />
+
+            <!-- ui, keyboard_color -->
+            <xs:enumeration value="ENABLED" />
+
+            <!-- midi -->
+            <xs:enumeration value="ENABLED" />
+            <xs:enumeration value="SEQ_INDEX" />
+            <xs:enumeration value="SEQ_LOOP_MODE" />
+            <xs:enumeration value="SEQ_TRANSPOSE_WITH_ROOT_NOTE" />
+            <xs:enumeration value="SEQ_PLAYBACK_RATE" />
+            <xs:enumeration value="SEQ_TRACK_MIDI_INPUT_VELOCITY" />
+            <xs:enumeration value="SEQ_TRANSPOSE" />
+
+            <!-- note_sequence -->
+            <xs:enumeration value="RATE" />
 
             <!-- modulator, instrument -->
             <xs:enumeration value="MOD_AMOUNT" />
             <xs:enumeration value="FREQUENCY" />
-            <xs:enumeration value="FREQUENCY" />
+            <xs:enumeration value="MOD_DELAY_TIME" />
+            <xs:enumeration value="ENV_ATTACK" />
+            <xs:enumeration value="ENV_ATTACK_CURVE" />
+            <xs:enumeration value="ENV_DECAY" />
+            <xs:enumeration value="ENV_DECAY_CURVE" />
+            <xs:enumeration value="ENV_SUSTAIN" />
+            <xs:enumeration value="ENV_RELEASE" />
+            <xs:enumeration value="ENV_RELEASE_CURVE" />
 
 
+        </xs:restriction>
+    </xs:simpleType>
+
+<!--=================================-->
+
+    <xs:simpleType name="outputTargetType">
+        <xs:annotation>
+            <xs:documentation>
+Valid output targets for routing audio to buses or auxiliary outputs.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MAIN_OUTPUT">
+                <xs:annotation>
+                    <xs:documentation>The main audio output.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="NO_OUTPUT">
+                <xs:annotation>
+                    <xs:documentation>Audio is not routed anywhere.</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="BUS_1"><xs:annotation><xs:documentation>Bus 1</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_2"><xs:annotation><xs:documentation>Bus 2</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_3"><xs:annotation><xs:documentation>Bus 3</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_4"><xs:annotation><xs:documentation>Bus 4</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_5"><xs:annotation><xs:documentation>Bus 5</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_6"><xs:annotation><xs:documentation>Bus 6</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_7"><xs:annotation><xs:documentation>Bus 7</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_8"><xs:annotation><xs:documentation>Bus 8</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_9"><xs:annotation><xs:documentation>Bus 9</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_10"><xs:annotation><xs:documentation>Bus 10</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_11"><xs:annotation><xs:documentation>Bus 11</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_12"><xs:annotation><xs:documentation>Bus 12</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_13"><xs:annotation><xs:documentation>Bus 13</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_14"><xs:annotation><xs:documentation>Bus 14</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_15"><xs:annotation><xs:documentation>Bus 15</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="BUS_16"><xs:annotation><xs:documentation>Bus 16</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_1"><xs:annotation><xs:documentation>Auxiliary output 1</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_2"><xs:annotation><xs:documentation>Auxiliary output 2</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_3"><xs:annotation><xs:documentation>Auxiliary output 3</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_4"><xs:annotation><xs:documentation>Auxiliary output 4</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_5"><xs:annotation><xs:documentation>Auxiliary output 5</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_6"><xs:annotation><xs:documentation>Auxiliary output 6</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_7"><xs:annotation><xs:documentation>Auxiliary output 7</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_8"><xs:annotation><xs:documentation>Auxiliary output 8</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_9"><xs:annotation><xs:documentation>Auxiliary output 9</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_10"><xs:annotation><xs:documentation>Auxiliary output 10</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_11"><xs:annotation><xs:documentation>Auxiliary output 11</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_12"><xs:annotation><xs:documentation>Auxiliary output 12</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_13"><xs:annotation><xs:documentation>Auxiliary output 13</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_14"><xs:annotation><xs:documentation>Auxiliary output 14</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_15"><xs:annotation><xs:documentation>Auxiliary output 15</xs:documentation></xs:annotation></xs:enumeration>
+            <xs:enumeration value="AUX_STEREO_OUTPUT_16"><xs:annotation><xs:documentation>Auxiliary output 16</xs:documentation></xs:annotation></xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
 
@@ -1246,6 +2237,73 @@ Default: `legato`
                     <xs:enumeration value="always" />
                     <xs:enumeration value="legato" />
                     <xs:enumeration value="off" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="delay" type="xs:decimal" default="0">
+            <xs:annotation><xs:documentation>
+The delay time before the sample is triggered.
+This specifies the amount of delay, with the unit determined by the `delayUnit` attribute.
+Can be an integer or float value.
+Default: `0`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="delayUnit" default="seconds">
+            <xs:annotation><xs:documentation>
+The unit for the delay time specified in the `delay` attribute.
+Possible values are:
+
+`seconds` (delay in seconds),
+`beats` (delay in musical beats), and
+`samples` (delay in audio samples).
+
+Default: `seconds`
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="seconds" />
+                    <xs:enumeration value="beats" />
+                    <xs:enumeration value="samples" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerEnabled" type="xs:boolean" default="false">
+            <xs:annotation><xs:documentation>
+Enables pattern retriggering for creating repeating sample sequences.
+When enabled, after the initial delay sequence completes, all samples in the group will retrigger according to the retriggerInterval.
+This allows creating looping drum patterns and rhythmic sequences from delayed samples.
+Default: `false`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerInterval" type="xs:decimal" default="4.0">
+            <xs:annotation><xs:documentation>
+The time interval between pattern repetitions when retriggerEnabled is true.
+This determines how long to wait before retriggering the entire delay sequence.
+The unit is specified by the retriggerIntervalUnit attribute.
+Default: `4.0`
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="retriggerIntervalUnit" default="beats">
+            <xs:annotation><xs:documentation>
+The unit for the retrigger interval specified in the retriggerInterval attribute.
+Possible values are:
+
+`seconds` (interval in seconds),
+`beats` (interval in musical beats - stays synchronized with host tempo), and
+`samples` (interval in audio samples).
+
+Default: `beats`
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="seconds" />
+                    <xs:enumeration value="beats" />
+                    <xs:enumeration value="samples" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -1349,6 +2407,36 @@ This can also be set at the `&lt;group&gt;` level. Default: `attack`.
         <xs:attributeGroup ref="onLoHiCCTrigger" />
         <xs:attributeGroup ref="roundRobinGroup" />
         <xs:attributeGroup ref="loopingGroup" />
+        <xs:attributeGroup ref="outputRoutingGroup" />
+
+        <xs:attribute name="playbackMode" default="auto">
+            <xs:annotation>
+                <xs:documentation>
+By default, the choice of playback engine is left up to the discretion of the user–they can set this in the Preferences screen.
+However, a sample creator can override this setting by setting the playbackMode for a specific sample, a group, or the entire instrument.
+Possible values are `memory`, `disk_streaming`, and `auto` (default).
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="memory">
+                        <xs:annotation>
+                            <xs:documentation>Load samples into memory for playback.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="disk_streaming">
+                        <xs:annotation>
+                            <xs:documentation>Stream samples from disk during playback.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="auto">
+                        <xs:annotation>
+                            <xs:documentation>Let the engine decide based on user preferences.</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:attributeGroup>
 
 <!--=================================-->
@@ -1713,6 +2801,80 @@ An integer number describing how sensitive the control should be to mouse drags.
 The higher the number, the less sensitive the control will be to mouse movements.
             </xs:documentation></xs:annotation>
         </xs:attribute>
+
+        <xs:attribute name="valueType" default="float">
+            <xs:annotation><xs:documentation>
+There are several possible values for this: `float` which yields numbers with two decimal points,
+`integer` which yields whole numbers, `multi_state`, which allows the user to choose between multiple states,
+and `musical_time` which yields musical time increments in beats and measures (for use with the built-in delay effect only).
+In order to use the `multi_state` option, you must also specify several `state name="something"` type elements.
+Default: float
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="float" />
+                    <xs:enumeration value="integer" />
+                    <xs:enumeration value="multi_state" />
+                    <xs:enumeration value="musical_time" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="tags" type="xs:string">
+            <xs:annotation><xs:documentation>
+A comma-separated list of tags to be associated with this control.
+These can be used in conjunction with any binding that takes a `controlIndex` (instead of the `controlIndex`).
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="visible" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this control is visible. There are two valid values: `true` (default), `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="enabled" type="xs:boolean" default="true">
+            <xs:annotation><xs:documentation>
+This controls whether or not this control is enabled. There are two valid values: `true` (default), `false`.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="tooltip" type="xs:string">
+            <xs:annotation><xs:documentation>
+A tool tip to display when the user hovers over this control.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="snapMode" default="none">
+            <xs:annotation><xs:documentation>
+This attribute controls how the control should snap to values.
+            </xs:documentation></xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="none" />
+                    <xs:enumeration value="whole_numbers" />
+                    <xs:enumeration value="tenths" />
+                    <xs:enumeration value="hundredths" />
+                    <xs:enumeration value="thousandths" />
+                    <xs:enumeration value="stop_points" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="snapStopPoints" type="xs:string">
+            <xs:annotation><xs:documentation>
+A comma-separated list of values that the control should snap to when `snapMode` is set to `stop_points`.
+Default: none.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="defeatSnapWithShift" type="xs:boolean" default="false">
+            <xs:annotation><xs:documentation>
+A true/false value indicating whether or not the user can defeat the snap-to-value behavior by holding down the shift key.
+Default: false.
+            </xs:documentation></xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="uid">
             <xs:annotation>
                 <xs:documentation>
@@ -2442,6 +3604,242 @@ The modulation speed in Hz.
         <xs:attribute name="hiCC125" type="midi7Bit" />
         <xs:attribute name="hiCC126" type="midi7Bit" />
         <xs:attribute name="hiCC127" type="midi7Bit" />
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="busOutputAttributes">
+        <xs:attribute name="output1Target" type="outputTargetType" default="MAIN_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The first audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output2Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The second audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output3Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The third audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output4Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The fourth audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output5Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The fifth audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output6Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The sixth audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output7Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The seventh audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output8Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The eighth audio output for this bus. This is a string that specifies the audio output that the bus should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="output1Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' first output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output2Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' second output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output3Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' third output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output4Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' fourth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output5Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' fifth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output6Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' sixth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output7Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' seventh output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output8Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the bus' eighth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+<!--=================================-->
+
+    <xs:attributeGroup name="outputRoutingGroup">
+        <xs:attribute name="output1Target" type="outputTargetType" default="MAIN_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The first audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output2Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The second audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output3Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The third audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output4Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The fourth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output5Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The fifth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output6Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The sixth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output7Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The seventh audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output8Target" type="outputTargetType" default="NO_OUTPUT">
+            <xs:annotation>
+                <xs:documentation>
+The eighth audio output for this sample. This is a string that specifies the audio output that the sample should be routed to.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="output1Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's first output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output2Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's second output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output3Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's third output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output4Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's fourth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output5Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's fifth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output6Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's sixth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output7Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's seventh output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="output8Volume" type="decimalMultiplier" default="1.0">
+            <xs:annotation>
+                <xs:documentation>
+The volume of the audio being sent to the sample's eighth output. This is a floating-point number between 0.0 and 1.0, where 0.0 is silent and 1.0 is full volume.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:attributeGroup>
 
 </xs:schema>
