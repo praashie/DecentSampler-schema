@@ -2555,6 +2555,7 @@ This can also be set at the `&lt;group&gt;` level. Default: `attack`.
             <xs:simpleType>
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="attack" />
+                    <xs:enumeration value="continuous" />
                     <xs:enumeration value="release" />
                     <xs:enumeration value="first" />
                     <xs:enumeration value="legato" />
