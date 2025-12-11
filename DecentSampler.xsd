@@ -477,23 +477,7 @@ Default value: `0.0` (no delay).
             </xs:documentation></xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="modBehavior" default="set">
-            <xs:annotation><xs:documentation>
-This attribute controls how the LFO affects the parameter it is targeting.
-Possible values are `add`, `multiply`, and `set`.
-If `add` is chosen, the LFO will add its value to the parameter it is targeting.
-If `multiply` is chosen, the LFO will multiply its value by the parameter it is targeting.
-If `set` is chosen, the LFO will set the parameter it is targeting to its value.
-Default value: `set`.
-            </xs:documentation></xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="add" />
-                    <xs:enumeration value="multiply" />
-                    <xs:enumeration value="set" />
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
+        <xs:attribute name="modBehavior" default="set" type="modBehavior" />
 
         <xs:attribute name="scope" default="global">
             <xs:annotation>
@@ -532,23 +516,7 @@ Default value: `1.0`.
             </xs:annotation>
         </xs:attribute>
 
-        <xs:attribute name="modBehavior" default="set">
-            <xs:annotation><xs:documentation>
-This attribute controls how the envelope affects the parameter it is targeting.
-Possible values are `add`, `multiply`, and `set`.
-If `add` is chosen, the envelope will add its value to the parameter it is targeting.
-If `multiply` is chosen, the envelope will multiply its value by the parameter it is targeting.
-If `set` is chosen, the envelope will set the parameter it is targeting to its value.
-Default value: `set`.
-            </xs:documentation></xs:annotation>
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="add" />
-                    <xs:enumeration value="multiply" />
-                    <xs:enumeration value="set" />
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
+        <xs:attribute name="modBehavior" default="set" type="modBehavior" />
 
         <xs:attribute name="attackCurve" type="curveShape" default="-100">
             <xs:annotation><xs:documentation>
@@ -941,6 +909,8 @@ It is a specific 0-based index of the effect to be modified by this binding.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
+
+        <xs:attribute name="modBehavior" type="modBehavior" />
 
         <xs:attribute name="modulatorIndex" type="xs:nonNegativeInteger">
             <xs:annotation>
@@ -2061,6 +2031,24 @@ Default: `0`
     </xs:simpleType>
 
     <!--=================================-->
+
+    <xs:simpleType name="modBehavior">
+        <xs:annotation><xs:documentation>
+This attribute controls how the modulator (envelope/LFO/binding) affects the parameter it is targeting.
+Possible values are `add`, `multiply`, and `set`.
+If `add` is chosen, the modulator will add its value to the parameter it is targeting.
+If `multiply` is chosen, the modulator will multiply its value by the parameter it is targeting.
+If `set` is chosen, the modulator will set the parameter it is targeting to its value.
+Default value: `set`.
+        </xs:documentation></xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="add" />
+            <xs:enumeration value="multiply" />
+            <xs:enumeration value="set" />
+        </xs:restriction>
+    </xs:simpleType>
+
+<!--=================================-->
 
     <xs:simpleType name="humanReadableNoteName">
         <xs:restriction base="xs:string">
