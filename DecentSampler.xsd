@@ -910,6 +910,23 @@ It is a specific 0-based index of the effect to be modified by this binding.
             </xs:annotation>
         </xs:attribute>
 
+        <xs:attribute name="factor" type="xs:decimal">
+            <xs:annotation>
+                <xs:documentation>
+Multiplier for much the `binding` changes its target.
+TODO: This is completely undocumented!
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="modAmount" type="xs:decimal">
+            <xs:annotation>
+                <xs:documentation>
+Controls how much the target parameter is affected when used inside a `midi` `velocity` element.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
         <xs:attribute name="modBehavior" type="modBehavior" />
 
         <xs:attribute name="modulatorIndex" type="xs:nonNegativeInteger">
