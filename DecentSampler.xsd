@@ -1818,7 +1818,44 @@ Beneath the `note` element, you can have any number of bindings.
             <xs:element name="binding" type="binding" maxOccurs="unbounded" />
         </xs:sequence>
 
-        <xs:attribute name="note" type="midi7BitRange" use="required" />
+        <xs:attribute name="note" type="midi7BitRange" use="required">
+            <xs:annotation>
+                <xs:documentation>
+This attribute specifies the MIDI note number (from 0 to 127) you would like to listen on.
+You can also specify ranges of notes by using a dash.
+For example `note="24-35"` would be used to specify bindings for the range of notes 24 through 35.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+
+        <xs:attribute name="eventType">
+            <xs:annotation>
+                <xs:documentation>
+This attribute specifies the type of event to listen for.
+The default is `note_on`, but you can also specify `note_off` or `any`.
+The default is any if this attribute is not specified.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="any" />
+                    <xs:enumeration value="note_on" />
+                    <xs:enumeration value="note_off" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="enabled" type="xs:boolean" />
+        <xs:attribute name="swallowNotes" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>
+The bindings that live below this note listener are called before any notes are played.
+By default, `swallowNotes` is false, which means that the keypress will then be received by the sampler.
+If swallowNotes is true, the sampler will not receive the note.
+This is useful if you wish to prevent certain keys from triggers notes.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
 
     <!--=================================-->
