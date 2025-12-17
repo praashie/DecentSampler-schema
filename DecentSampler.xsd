@@ -218,6 +218,7 @@ A hex representation of the ARGB color to be used for this key range.
             <xs:element name="envelope" type="modulatorEnvelope" />
             <xs:element name="mpeTimbre" type="modulatorMPETimbre" />
             <xs:element name="mpePressure" type="modulatorMPEPressure" />
+            <xs:element name="midiVelocity" type="modulatorMidiVelocity" />
         </xs:choice>
     </xs:complexType>
 
@@ -305,6 +306,28 @@ The time in milliseconds it takes for the MPE pressure to fall to its target val
 Default value: 0 milliseconds.
             </xs:documentation></xs:annotation>
         </xs:attribute>
+    </xs:complexType>
+
+<!--=================================-->
+
+    <xs:complexType name="modulatorMidiVelocity">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="binding" type="binding" />
+        </xs:sequence>
+
+        <xs:attribute name="scope">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="global" />
+                    <xs:enumeration value="voice" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+
+        <xs:attribute name="modAmount" type="xs:decimal">
+
+        </xs:attribute>
+
     </xs:complexType>
 
 <!--=================================-->
